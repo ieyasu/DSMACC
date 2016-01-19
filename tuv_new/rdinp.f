@@ -104,7 +104,6 @@
  115  FORMAT(A7)
       IF(avar(1:2) .EQ. '??' ) THEN
          CALL gethlp(avar, nhelp, ahline)
-         PAUSE
       ENDIF
 
       WRITE(*,100) 
@@ -221,7 +220,6 @@
 
       IF(avar(1:1) .EQ. '?') THEN
          CALL gethlp(avar, nhelp, ahline)
-         PAUSE
          GO TO 20
       ENDIF
 
