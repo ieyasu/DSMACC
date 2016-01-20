@@ -1,27 +1,49 @@
-##############################################################################
--include Makefile.defs
+include Makefile.defs
 export KPP_HOME=$(PWD)/kpp
 
-all: check bin/dsmacc
+DSMACC_SRC = driver.f90 dsmacc.kpp \
+	global.inc rate.inc util.inc photolysis.inc \
+	inorganic.kpp organic.kpp
 
-source src/dsmacc_Main.f90: dsmacc.kpp global.inc rate.inc util.inc driver.f90 photolysis.inc kpp/bin/kpp
-	cd src && rm -f depend.mk && ../kpp/bin/kpp ../dsmacc.kpp dsmacc
+.PHONY: all dsmacc kpp tuv depend check clean distclean
 
-bin/dsmacc: src/dsmacc_Main.f90 Makefile.defs
-	cd src && make
+all: kpp dsmacc
 
+dsmacc: bin/dsmacc
+bin/dsmacc: src/dsmacc_Main.f90 tuv src/depend.mk Makefile.defs
+	cd src && $(MAKE)
+
+src/dsmacc_Main.f90: $(DSMACC_SRC)
+	cd src && ../kpp/bin/kpp ../dsmacc.kpp dsmacc
+
+kpp: kpp/bin/kpp
 kpp/bin/kpp: Makefile.defs
-	cd kpp && make
+	cd kpp && $(MAKE)
+
+tuv: tuv/libtuv.a
+tuv/libtuv.a: tuv/depend.mk
+	cd tuv && $(MAKE)
+
+depend: tuv/depend.mk src/depend.mk
+
+src/depend.mk: src/dsmacc_Main.f90
+	rm -f src/depend.mk
+	cd src && $(MAKE) depend
+
+tuv/depend.mk: $(wildcard tuv/*.f)
+	rm -f tuv/depend.mk
+	cd tuv && $(MAKE) depend
 
 check: kpp/bin/kpp
-	cd test && make
+	cd test && $(MAKE)
 
 clean:
-	cd src && make -i distclean
-	cd test && make -i clean
-	cd kpp && make clean
+	cd src && $(MAKE) distclean
+	cd test && $(MAKE) clean
+	cd tuv && $(MAKE) clean
+	cd kpp && $(MAKE) clean
 
 distclean: clean
 	@rm -f bin/dsmacc
-	cd kpp && make -i distclean
-	@rm -rf autom4te.cache config.status config.log Makefile.deps
+	cd kpp && $(MAKE) distclean
+	@rm -f autom4te.cache config.status config.log Makefile.deps
