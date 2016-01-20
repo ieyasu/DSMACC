@@ -57,7 +57,7 @@
 * Res., 93, 7105-7112, 1988.
 *  Values at 273K from 263.8 to 648.8 nm in approximately 0.5 nm intervals
 
-      fil = 'DATAE1/NO2/NO2_ncar_00.abs'
+      fil = 'tuv/DATAE1/NO2/NO2_ncar_00.abs'
       OPEN(UNIT=kin,FILE=fil,STATUS='old')
       n = 750
       DO i = 1, n
@@ -137,7 +137,7 @@
 
       n = 0
 
-      OPEN(UNIT=kin,FILE='DATAE1/O2/O2_brasseur.abs')
+      OPEN(UNIT=kin,FILE='tuv/DATAE1/O2/O2_brasseur.abs')
       DO i = 1, 7
          READ(kin,*)
       ENDDO
@@ -151,7 +151,7 @@
       ENDDO
       CLOSE(kin)
 
-      OPEN(UNIT=kin,FILE='DATAE1/O2/O2_yoshino.abs',STATUS='old')
+      OPEN(UNIT=kin,FILE='tuv/DATAE1/O2/O2_yoshino.abs',STATUS='old')
       DO i = 1, 8
          READ(kin,*)
       ENDDO
@@ -310,7 +310,7 @@
 * from 175.439 to 847.500 nm
 * use value at 273 K
 
-      OPEN(UNIT=kin,FILE='DATAE1/wmo85',STATUS='old')
+      OPEN(UNIT=kin,FILE='tuv/DATAE1/wmo85',STATUS='old')
       DO i = 1, 3
          read(kin,*)
       ENDDO
@@ -354,7 +354,7 @@
 * of ozone in the 185- to 350-nm wavelength range,
 * J. Geophys. Res., vol. 91, 14501-14508, 1986.
 
-      OPEN(UNIT=kin,FILE='DATAE1/O3/O3.molina.abs',STATUS='old')
+      OPEN(UNIT=kin,FILE='tuv/DATAE1/O3/O3.molina.abs',STATUS='old')
       DO i = 1, 5
          READ(kin,*)
       ENDDO
@@ -497,7 +497,7 @@
 * from 175.439 to 847.500 nm
 * use value at 273 K
 
-      OPEN(UNIT=kin,FILE='DATAE1/wmo85',STATUS='old')
+      OPEN(UNIT=kin,FILE='tuv/DATAE1/wmo85',STATUS='old')
       DO i = 1, 3
          read(kin,*)
       ENDDO
@@ -525,7 +525,7 @@
 *=  For Hartley and Huggins bands, use temperature-dependent values from     =*
 *=  Malicet et al., J. Atmos. Chem.  v.21, pp.263-273, 1995.                 =*
 
-      OPEN(UNIT=kin,FILE='DATAE1/O3/o3absqs.dat',STATUS='old')
+      OPEN(UNIT=kin,FILE='tuv/DATAE1/O3/o3absqs.dat',STATUS='old')
       DO i = 1, 1
          READ(kin,*)
       ENDDO
@@ -686,7 +686,7 @@
 * from 175.439 to 847.500 nm
 * use value at 273 K
 
-      OPEN(UNIT=kin,FILE='DATAE1/wmo85',STATUS='old')
+      OPEN(UNIT=kin,FILE='tuv/DATAE1/wmo85',STATUS='old')
       DO i = 1, 3
          read(kin,*)
       ENDDO
@@ -714,7 +714,7 @@
 * For Hartley and Huggins bands, use temperature-dependent values from
 *  Bass et al.
 
-      OPEN(UNIT=kin,FILE='DATAE1/O3/O3_bass.abs',STATUS='old')
+      OPEN(UNIT=kin,FILE='tuv/DATAE1/O3/O3_bass.abs',STATUS='old')
       DO i = 1, 8
          READ(kin,*)
       ENDDO
@@ -857,8 +857,8 @@
 * 37, 165-182, 1987, T. J. McGee and J. Burris Jr.
 * Angstrom vs. cm2/molecule, value at 221 K
 
-      fil = 'DATA/McGee87'
-      OPEN(UNIT=kin,FILE='DATAE1/SO2/SO2xs.all',STATUS='old')
+      fil = 'tuv/DATA/McGee87'
+      OPEN(UNIT=kin,FILE='tuv/DATAE1/SO2/SO2xs.all',STATUS='old')
       DO 11, i = 1,3 
          read(kin,*)
    11 CONTINUE

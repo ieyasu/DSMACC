@@ -13,20 +13,21 @@ OBJS = functs.o odo3.o rdetfl.o rxn.o setcld.o setso2.o swphys.o	\
 .DUMMY: all depend clean distclean
 
 .f.o:
-	$(FC) -o $*.o -c $*.f $(TUVF90FLAGS)
+	$(FC) $(TUVF90FLAGS) -o $*.o -c $*.f
 
 all: libtuv.a
 
 # XXX get ar command from autoconf
 libtuv.a: $(OBJS)
-	ar -rv $@ $(OBJS)
+	ar -r $@ $(OBJS)
 
 depend: depend.mk
 depend.mk: $(SRCS)
 	../sfmakedepend --file=$@ *.f
 
 clean:
-	rm -f *.o *.mod *.log *~ depend.mk.old
+	rm -f *.o *.mod lib*.a
+	rm -f *.log *~ depend.mk.old
 
 distclean: clean
 	rm -f depend.mk* tuvlog.txt

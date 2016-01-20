@@ -162,7 +162,7 @@
 
       j = j + 1
       label(j) = 'RB Meter, model 501'
-      OPEN(UNIT=kin,FILE='DATAS1/rbm.501',STATUS='old')
+      OPEN(UNIT=kin,FILE='tuv/DATAS1/rbm.501',STATUS='old')
       n = 57
       DO i = 1, n
          READ(kin,*) x1(i), y1(i)
@@ -206,7 +206,7 @@
 
       j = j + 1
       label(j) = 'Eppley UV Photometer'
-      OPEN(UNIT=kin,FILE='DATAS1/eppley_uv',STATUS='old')
+      OPEN(UNIT=kin,FILE='tuv/DATAS1/eppley_uv',STATUS='old')
       DO i = 1, 6
          READ(kin,*)
       ENDDO

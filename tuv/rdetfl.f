@@ -111,7 +111,7 @@
 * more complex files may be done with longer code in a read#.f subroutine.
 
  1    IF (msun .EQ. 1) THEN
-         fil = 'DATAE1/SUN/extsol.flx'
+         fil = 'tuv/DATAE1/SUN/extsol.flx'
          write(kout,*) fil
          OPEN(UNIT=kin,FILE=fil,STATUS='old')
          nhead = 3
@@ -137,7 +137,7 @@
          ENDDO
 
  2    ELSEIF (msun .EQ. 2) THEN
-         fil = 'DATAE1/SUN/lowsun3.flx'
+         fil = 'tuv/DATAE1/SUN/lowsun3.flx'
          write(kout,*) fil
          OPEN(UNIT=kin,FILE=fil,STATUS='old')
          nhead = 3
@@ -163,7 +163,7 @@
          ENDDO
 
  3    ELSEIF (msun .EQ. 3) THEN
-         fil = 'DATAE1/SUN/modtran1.flx'
+         fil = 'tuv/DATAE1/SUN/modtran1.flx'
          write(kout,*) fil
          OPEN(UNIT=kin,FILE=fil,STATUS='old')
          nhead = 6
@@ -189,7 +189,7 @@
          ENDDO
 
  4    ELSEIF (msun .EQ. 4) THEN
-         fil = 'DATAE1/SUN/nicolarv.flx'
+         fil = 'tuv/DATAE1/SUN/nicolarv.flx'
          write(kout,*) fil
          OPEN(UNIT=kin,FILE=fil,STATUS='old')
          nhead = 8
@@ -216,7 +216,7 @@
 
  5    ELSEIF (msun .EQ. 5) THEN
 * unofficial - do not use
-         fil = 'DATAE2/SUN/solstice.flx'
+         fil = 'tuv/DATAE2/SUN/solstice.flx'
          write(kout,*) fil
          OPEN(UNIT=kin,FILE=fil,STATUS='old')
          nhead = 11
@@ -243,7 +243,7 @@
 
  6    ELSEIF (msun .EQ. 6) THEN
 * unofficial - do not use
-         fil = 'DATAE2/SUN/suntoms.flx'
+         fil = 'tuv/DATAE2/SUN/suntoms.flx'
          write(kout,*) fil
          OPEN(UNIT=kin,FILE=fil,STATUS='old')
          nhead = 3
@@ -270,7 +270,7 @@
          ENDDO
 
  7    ELSEIF (msun .EQ. 7) THEN
-         fil = 'DATAE1/SUN/neckel.flx'
+         fil = 'tuv/DATAE1/SUN/neckel.flx'
          write(kout,*) fil
          OPEN(UNIT=kin,FILE=fil,STATUS='old')
          nhead = 11
@@ -300,7 +300,7 @@
 
  8    ELSEIF (msun .EQ. 8) THEN
          nhead = 5
-         fil = 'DATAE1/SUN/atlas3_1994_317_a.dat'
+         fil = 'tuv/DATAE1/SUN/atlas3_1994_317_a.dat'
          write(kout,*) fil
          OPEN(UNIT=kin,FILE=fil,STATUS='old')
          nhead = 13
@@ -327,7 +327,7 @@
          ENDDO
 
  9    ELSEIF (msun .EQ. 9) THEN
-         fil = 'DATAE1/SUN/solstice.flx'
+         fil = 'tuv/DATAE1/SUN/solstice.flx'
          write(kout,*) fil
          OPEN(UNIT=kin,FILE=fil,STATUS='old')
          nhead = 2
@@ -353,7 +353,7 @@
          ENDDO
 
  10   ELSEIF (msun .EQ. 10) THEN
-         WRITE(kout,*) 'DATAE1/SUN/susim_hi.flx'
+         WRITE(kout,*) 'tuv/DATAE1/SUN/susim_hi.flx'
          CALL read1(nw,wl,yg1)
          DO iw = 1, nw-1
             f(iw) = yg1(iw)
@@ -361,16 +361,16 @@
 
 
  11   ELSEIF (msun .EQ. 11) THEN
-         WRITE(kout,*) 'DATAE1/SUN/wmo85.flx'
+         WRITE(kout,*) 'tuv/DATAE1/SUN/wmo85.flx'
          CALL read2(nw,wl,yg1)
          DO iw = 1, nw-1
             f(iw) = yg1(iw)
          ENDDO
 
  12   ELSEIF (msun .EQ. 12) THEN
-         WRITE(kout,*) 'DATAE1/SUN/susim_hi.flx'
+         WRITE(kout,*) 'tuv/DATAE1/SUN/susim_hi.flx'
          CALL read1(nw,wl,yg1)
-         fil = 'DATAE1/SUN/neckel.flx'
+         fil = 'tuv/DATAE1/SUN/neckel.flx'
          write(kout,*) fil
          OPEN(UNIT=kin,FILE=fil,STATUS='old')
          nhead = 11
@@ -405,11 +405,11 @@
 
  13   ELSEIF (msun .EQ. 13) THEN
 
-         WRITE(kout,*) 'DATAE1/SUN/susim_hi.flx'
+         WRITE(kout,*) 'tuv/DATAE1/SUN/susim_hi.flx'
          CALL read1(nw,wl,yg1)
 
          nhead = 5
-         fil = 'DATAE1/SUN/atlas3_1994_317_a.dat'
+         fil = 'tuv/DATAE1/SUN/atlas3_1994_317_a.dat'
          write(kout,*) fil
          OPEN(UNIT=kin,FILE=fil,STATUS='old')
          n = 5160
@@ -431,7 +431,7 @@
             STOP
          ENDIF         
 
-         fil = 'DATAE1/SUN/neckel.flx'
+         fil = 'tuv/DATAE1/SUN/neckel.flx'
          write(kout,*) fil
          OPEN(UNIT=kin,FILE=fil,STATUS='old')
          nhead = 11
@@ -525,7 +525,7 @@
 
 ** high resolution
 
-      fil = 'DATAE1/SUN/susim_hi.flx'
+      fil = 'tuv/DATAE1/SUN/susim_hi.flx'
       OPEN(UNIT=kin,FILE=fil,STATUS='old')
       DO 11, i = 1, 7
          READ(kin,*)
@@ -604,7 +604,7 @@
 
 *********WMO 85 irradiance
 
-      OPEN(UNIT=kin,FILE='DATAE1/SUN/wmo85.flx',STATUS='old')
+      OPEN(UNIT=kin,FILE='tuv/DATAE1/SUN/wmo85.flx',STATUS='old')
       DO 11, i = 1, 3
          READ(kin,*)
    11 CONTINUE

@@ -40,7 +40,7 @@
 
       WRITE(kout,*) 'air temperature: USSA, 1976'
 
-      OPEN(kin,FILE='DATAE1/ATM/ussa.temp',STATUS='old')
+      OPEN(kin,FILE='tuv/DATAE1/ATM/ussa.temp',STATUS='old')
       DO i = 1, 3
          READ(kin,*)
       ENDDO

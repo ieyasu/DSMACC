@@ -142,7 +142,8 @@ c      myld = kjpl00
 * read parameters from JPL'97
 
       IF (myld .EQ. kjpl97) THEN
-        OPEN(UNIT=kin,FILE='DATAJ1/YLD/O3.param_jpl97.yld',STATUS='old')
+        OPEN(UNIT=kin,FILE='tuv/DATAJ1/YLD/O3.param_jpl97.yld',
+     &    STATUS='old')
         READ(kin,*)
         READ(kin,*)
         READ(kin,*)
@@ -179,7 +180,8 @@ c      myld = kjpl00
 * and J. G. Anderson, Geophys. Res. Lett., 21, 2227-2230, 1994.
 
       IF (myld .EQ. kmich) THEN
-        OPEN(UNIT=kin,FILE='DATAJ1/YLD/O3.param.yld',STATUS='old')
+        OPEN(UNIT=kin,FILE='tuv/DATAJ1/YLD/O3.param.yld',
+     &    STATUS='old')
         READ(kin,*)
         READ(kin,*)
         READ(kin,*)
@@ -216,7 +218,7 @@ c      myld = kjpl00
 * Shetter et al, J.Geophys.Res., v 101 (D9), pg. 14,631-14,641, June 20, 1996
 
       IF (myld .EQ. kshet) THEN
-        OPEN(UNIT=kin,FILE='DATAJ1/YLD/O3_shetter.yld',STATUS='OLD')
+        OPEN(UNIT=kin,FILE='tuv/DATAJ1/YLD/O3_shetter.yld',STATUS='OLD')
         READ(kin,*) idum, n
         DO i = 1, idum-2
           READ(kin,*)
@@ -497,7 +499,7 @@ c      myld = kjpl00
 * cross sections for NO2 as a function of temperature, J. Geophys.
 * Res., 93, 7105-7112, 1988.
 *     from 263.8 to 648.8 nm in approximately 0.5 nm intervals
-C     OPEN(UNIT=kin,FILE='DATAE1/NO2/NO2_ncar_00.abs',STATUS='old')
+C     OPEN(UNIT=kin,FILE='tuv/DATAE1/NO2/NO2_ncar_00.abs',STATUS='old')
 C     n = 750
 C     DO i = 1, n
 C        READ(kin,*) x1(i), y1(i), dum, dum, idum
@@ -528,7 +530,7 @@ C     ENDIF
 
       if (mabs .eq. 1) then
 
-         OPEN(UNIT=kin,FILE='DATAE1/NO2/NO2_jpl94.abs',STATUS='old')
+         OPEN(UNIT=kin,FILE='tuv/DATAE1/NO2/NO2_jpl94.abs',STATUS='old')
          READ(kin,*) idum, n
          DO i = 1, idum-2
             READ(kin,*)
@@ -570,7 +572,7 @@ C     ENDIF
 
       elseif (mabs .eq. 2) then
 
-         OPEN(UNIT=kin,FILE='DATAE1/NO2/NO2_Har.abs',status='old')
+         OPEN(UNIT=kin,FILE='tuv/DATAE1/NO2/NO2_Har.abs',status='old')
          DO i = 1, 9
             READ(kin,*)
          ENDDO
@@ -594,7 +596,8 @@ C     ENDIF
 
       elseif (mabs .eq. 3) then
 
-         OPEN(UNIT=kin,FILE='DATAE1/NO2/NO2_IUPAC2003.abs',status='old')
+         OPEN(UNIT=kin,FILE='tuv/DATAE1/NO2/NO2_IUPAC2003.abs',
+     &     status='old')
          DO i = 1, 5
             READ(kin,*)
          ENDDO
@@ -639,7 +642,7 @@ C     ENDIF
 * quantum yield
 * from Gardiner, Sperry, and Calvert
 
-      OPEN(UNIT=kin,FILE='DATAJ1/YLD/NO2_calvert.yld',STATUS='old')
+      OPEN(UNIT=kin,FILE='tuv/DATAJ1/YLD/NO2_calvert.yld',STATUS='old')
       DO i = 1, 8
          READ(kin,*) 
       ENDDO
@@ -667,7 +670,7 @@ C     ENDIF
 * quantum yield
 * from Troe
 
-          OPEN(UNIT=kin,FILE='DATAJ1/YLD/NO2_troe.yld',STATUS='old')
+          OPEN(UNIT=kin,FILE='tuv/DATAJ1/YLD/NO2_troe.yld',STATUS='old')
           DO i = 1, 8
              READ(kin,*) 
           ENDDO
@@ -792,7 +795,7 @@ C     ENDIF
 * cross section
 *     measurements of Graham and Johnston 1978
       if (mabs .eq. 1) then
-      OPEN(UNIT=kin,FILE='DATAJ1/ABS/NO3_gj78.abs',STATUS='old')
+      OPEN(UNIT=kin,FILE='tuv/DATAJ1/ABS/NO3_gj78.abs',STATUS='old')
       DO i = 1, 9
          READ(kin,*)
       ENDDO
@@ -819,7 +822,7 @@ C     ENDIF
 
 *     cross section from JPL94:
 
-      OPEN(UNIT=kin,FILE='DATAJ1/ABS/NO3_jpl94.abs',STATUS='old')
+      OPEN(UNIT=kin,FILE='tuv/DATAJ1/ABS/NO3_jpl94.abs',STATUS='old')
       READ(kin,*) idum, n
       DO i = 1, idum-2
          READ(kin,*)
@@ -853,7 +856,7 @@ C     ENDIF
         
         
       else if (mabs .eq. 2) then
-      OPEN(UNIT=kin,FILE='DATABHH/NO3_IUPAC2006.abs',STATUS='old')
+      OPEN(UNIT=kin,FILE='tuv/DATABHH/NO3_IUPAC2006.abs',STATUS='old')
       READ(kin,*) n
       DO i = 1, n
         READ(kin,*) x1(i), y1(i), y2(i)
@@ -931,7 +934,8 @@ C     ENDIF
 
       ELSEIF (myld.EQ.2) THEN
 
-      OPEN(UNIT=kin,FILE='DATAJ1/YLD/NO3_Johnston96.yld',STATUS='old') 
+      OPEN(UNIT=kin,FILE='tuv/DATAJ1/YLD/NO3_Johnston96.yld',
+     &  STATUS='old') 
          READ(kin,*) 
          READ(kin,*) 
          READ(kin,*) 
@@ -1079,7 +1083,7 @@ C     ENDIF
 
 * cross section from jpl97, table up to 280 nm
 
-      OPEN(UNIT=kin,FILE='DATAJ1/ABS/N2O5_jpl97.abs',STATUS='old')
+      OPEN(UNIT=kin,FILE='tuv/DATAJ1/ABS/N2O5_jpl97.abs',STATUS='old')
       READ(kin,*) idum, n
       DO i = 1, idum-2
          READ(kin,*)
@@ -1104,7 +1108,7 @@ C     ENDIF
          STOP
       ENDIF 
 
-* quantum yield : see DATAJ1/YLD/N2O5.qy for explanation
+* quantum yield : see tuv/DATAJ1/YLD/N2O5.qy for explanation
 * correct for T-dependence of cross section
 
       DO iw = 1, nw - 1
@@ -1240,7 +1244,7 @@ C     ENDIF
 
       j = j + 1
       jlabel(j) = 'HNO2 -> OH + NO'
-      OPEN(UNIT=kin,FILE='DATAJ1/ABS/HNO2_jpl92.abs',STATUS='old')
+      OPEN(UNIT=kin,FILE='tuv/DATAJ1/ABS/HNO2_jpl92.abs',STATUS='old')
       DO i = 1, 13
          READ(kin,*)
       ENDDO
@@ -1265,7 +1269,7 @@ C     ENDIF
 
         j = j + 1
         jlabel(j) = 'HNO2 -> OH + NO'
-        OPEN(UNIT=kin,FILE='DATAJ1/ABS/HNO2_bongartz94.abs',
+        OPEN(UNIT=kin,FILE='tuv/DATAJ1/ABS/HNO2_bongartz94.abs',
      >            STATUS='old')
         DO i = 1, 7
           READ(kin,*)
@@ -1371,7 +1375,7 @@ C     ENDIF
 
 C* cross section from JPL85
 C
-C      OPEN(UNIT=kin,FILE='DATAJ1/ABS/HNO3.abs',STATUS='old')
+C      OPEN(UNIT=kin,FILE='tuv/DATAJ1/ABS/HNO3.abs',STATUS='old')
 C      DO i = 1, 9
 C         READ(kin,*)
 C      ENDDO
@@ -1404,7 +1408,7 @@ C      ENDDO
 
 * HNO3 cross section parameters from Burkholder et al. 1993
 
-      OPEN(UNIT=kin,FILE='DATAJ1/ABS/HNO3_burk.abs',STATUS='old')
+      OPEN(UNIT=kin,FILE='tuv/DATAJ1/ABS/HNO3_burk.abs',STATUS='old')
       DO i = 1, 6
          READ(kin,*)
       END DO
@@ -1520,8 +1524,8 @@ C* local
 
       j = j + 1
       jlabel(j) = 'HNO4 -> HO2 + NO2'
-C      OPEN(UNIT=kin,FILE='DATAJ1/ABS/HNO4.abs',STATUS='old')
-      OPEN(UNIT=kin,FILE='DATAJ1/ABS/HNO4_jpl92.abs',STATUS='old')
+C      OPEN(UNIT=kin,FILE='tuv/DATAJ1/ABS/HNO4.abs',STATUS='old')
+      OPEN(UNIT=kin,FILE='tuv/DATAJ1/ABS/HNO4_jpl92.abs',STATUS='old')
       DO i = 1, 4
          READ(kin,*)
       ENDDO
@@ -1631,7 +1635,7 @@ C     INTEGER n1, n2, n3, n4, n5
 
       j = j + 1
       jlabel(j) = 'H2O2 -> 2 OH'
-C     OPEN(UNIT=kin,FILE='DATAJ1/ABS/H2O2_lin.abs',STATUS='old')
+C     OPEN(UNIT=kin,FILE='tuv/DATAJ1/ABS/H2O2_lin.abs',STATUS='old')
 C     DO i = 1, 7
 C        READ(kin,*)
 C     ENDDO
@@ -1655,7 +1659,7 @@ C      ENDIF
 * cross section from JPL94 (identical to JPL97)
 * tabulated data up to 260 nm
 
-      OPEN(UNIT=kin,FILE='DATAJ1/ABS/H2O2_jpl94.abs',STATUS='old')
+      OPEN(UNIT=kin,FILE='tuv/DATAJ1/ABS/H2O2_jpl94.abs',STATUS='old')
       READ(kin,*) idum,n
       DO i = 1, idum-2
          READ(kin,*)
@@ -1820,7 +1824,7 @@ C      ENDIF
       kopt = 2
       if (kopt .eq. 1) then
 
-      OPEN(UNIT=kin,FILE='DATAJ1/ABS/CHBr3.abs',STATUS='old')
+      OPEN(UNIT=kin,FILE='tuv/DATAJ1/ABS/CHBr3.abs',STATUS='old')
       DO i = 1, 5
          READ(kin,*)
       ENDDO
@@ -1958,7 +1962,7 @@ C      ENDIF
 
       ELSEIF (kopt .EQ. 2) THEN
 
-      OPEN(UNIT=kin,FILE='DATAJ1/ABS/CHBr3.jpl97',STATUS='old')
+      OPEN(UNIT=kin,FILE='tuv/DATAJ1/ABS/CHBr3.jpl97',STATUS='old')
       DO i = 1, 6
          READ(kin,*)
       ENDDO
@@ -2165,7 +2169,7 @@ C      ENDIF
 
 * read NBS/Bass data
 
-         OPEN(UNIT=kin,FILE='DATAJ1/CH2O/CH2O_nbs.abs'
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH2O/CH2O_nbs.abs'
      $        ,STATUS='old')
          n = 4032
          DO i = 1, n
@@ -2184,7 +2188,7 @@ C      ENDIF
 
       ELSEIF (mopt1 .EQ. 2 .OR. mopt1 .EQ. 3 .OR. mopt1 .EQ. 4) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/CH2O_iupac1.abs',STATUS='old')
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH2O_iupac1.abs',STATUS='old')
          DO i = 1, 4
             READ(kin,*)
          ENDDO
@@ -2213,7 +2217,7 @@ C      ENDIF
 * if y1 < 0, then make = 0 (some negative cross sections, actually 273 K intercepts
 * are in the original data,  Here, make equal to zero)
 
-         OPEN(kin,FILE='DATAJ1/CH2O/CH2O_can_hr.abs',STATUS='old')
+         OPEN(kin,FILE='tuv/DATAJ1/CH2O/CH2O_can_hr.abs',STATUS='old')
          READ(kin,*) idum, n
          DO i = 1, idum-2
             READ(kin,*)
@@ -2269,7 +2273,7 @@ C      ENDIF
 
       ELSEIF(mopt1 .eq. 4) THEN
 
-            OPEN(UNIT=kin,FILE='DATAJ1/CH2O/CH2O_can_lr.abs',
+            OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH2O/CH2O_can_lr.abs',
      $        STATUS='old')
             DO i = 1, 4
                READ(kin,*)
@@ -2309,7 +2313,7 @@ C      ENDIF
 
 * read Rodgers data
 
-         OPEN(UNIT=kin,FILE='DATAJ1/CH2O/CH2O_rog.abs'
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH2O/CH2O_rog.abs'
      $        ,STATUS='old')
          DO i = 1, 10
             READ(kin,*)
@@ -2331,7 +2335,8 @@ C      ENDIF
 
       ELSEIF(mopt1 .EQ. 6) THEN
 
-            OPEN(UNIT=kin,FILE='DATAJ1/CH2O/CH2O_ncar.abs',STATUS='old')
+            OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH2O/CH2O_ncar.abs',
+     &        STATUS='old')
             DO i = 1, 3
                READ(kin,*)
             ENDDO
@@ -2368,7 +2373,8 @@ C      ENDIF
       ELSEIF(mopt1 .EQ. 7) THEN
 
             OPEN(UNIT=kin,FILE=
-     >           'DATAJ1/CH2O/CH2O_meller_moortgat.abs',STATUS='old')
+     >           'tuv/DATAJ1/CH2O/CH2O_meller_moortgat.abs',
+     &           STATUS='old')
             DO i = 1, 8
                READ(kin,*)
             ENDDO
@@ -2409,7 +2415,8 @@ C      ENDIF
 
       IF (mopt2 .EQ. 1) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/CH2O/CH2O_i_mad.yld',STATUS='old')
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH2O/CH2O_i_mad.yld',
+     &     STATUS='old')
          DO i = 1, 11
             READ(kin,*)
          ENDDO
@@ -2428,7 +2435,8 @@ C      ENDIF
             STOP
          ENDIF
 
-         OPEN(UNIT=kin,FILE='DATAJ1/CH2O/CH2O_ii_mad.yld',STATUS='old')
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH2O/CH2O_ii_mad.yld',
+     &     STATUS='old')
          DO i = 1, 9
             READ(kin,*)
          ENDDO
@@ -2449,7 +2457,8 @@ C      ENDIF
 
       ELSEIF(mopt2 .EQ. 2) then
 
-         OPEN(UNIT=kin,FILE='DATAJ1/CH2O/CH2O_iupac.yld',STATUS='old')
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH2O/CH2O_iupac.yld',
+     &     STATUS='old')
          DO i = 1, 7
             READ(kin,*) 
          ENDDO
@@ -2509,7 +2518,8 @@ c         ENDDO
 
       ELSE IF(mopt2 .EQ. 3) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/CH2O/CH2O_jpl97.dat',STATUS='old')
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH2O/CH2O_jpl97.dat',
+     &     STATUS='old')
          DO i = 1, 4
             READ(kin,*) 
          ENDDO
@@ -2544,7 +2554,7 @@ c         ENDDO
 
       ELSEIF(mopt2 .EQ. 4) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/CH2O/CH2O_iupac2003.yld',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH2O/CH2O_iupac2003.yld',
      >         STATUS='old')
          DO i = 1, 4
             READ(kin,*) 
@@ -2764,7 +2774,8 @@ c         ENDDO
 
       IF (mabs .EQ. 1) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/CH3CHO/CH3CHO_iup.abs',STATUS='old')
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH3CHO/CH3CHO_iup.abs',
+     &     STATUS='old')
          do i = 1, 4
             read(kin,*)
          enddo
@@ -2789,7 +2800,8 @@ c         ENDDO
 
 * cross section from Calvert and  Pitts
          
-         OPEN(UNIT=kin,FILE='DATAJ1/CH3CHO/d021_cp.abs',STATUS='old')
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH3CHO/d021_cp.abs',
+     &     STATUS='old')
          DO i = 1, 14
             READ(kin,*)
          ENDDO
@@ -2813,7 +2825,8 @@ c         ENDDO
 
       ELSEIF(mabs .EQ. 3) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/CH3CHO/CH3CHO_mar.abs',STATUS='old')
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH3CHO/CH3CHO_mar.abs',
+     &     STATUS='old')
          DO i = 1, 3
             READ(kin,*)
          ENDDO
@@ -2843,17 +2856,17 @@ c         ENDDO
 * ch3cho.005 - IUPAC'92
 * ch3cho.006 - Libuda, thesis Wuppertal 1992
          
-c         OPEN(UNIT=kin,FILE='DATAJ2/KFA/ch3cho.001',STATUS='old')
+c         OPEN(UNIT=kin,FILE='tuv/DATAJ2/KFA/ch3cho.001',STATUS='old')
 C         n = 217
-c         OPEN(UNIT=kin,FILE='DATAJ2/KFA/ch3cho.002',STATUS='old')
+c         OPEN(UNIT=kin,FILE='tuv/DATAJ2/KFA/ch3cho.002',STATUS='old')
 c         n = 63
-c         OPEN(UNIT=kin,FILE='DATAJ2/KFA/ch3cho.003',STATUS='old')
+c         OPEN(UNIT=kin,FILE='tuv/DATAJ2/KFA/ch3cho.003',STATUS='old')
 c         n = 13738
-c         OPEN(UNIT=kin,FILE='DATAJ2/KFA/ch3cho.004',STATUS='old')
+c         OPEN(UNIT=kin,FILE='tuv/DATAJ2/KFA/ch3cho.004',STATUS='old')
 c         n = 2053
-         OPEN(UNIT=kin,FILE='DATAJ2/KFA/ch3cho.005',STATUS='old')
+         OPEN(UNIT=kin,FILE='tuv/DATAJ2/KFA/ch3cho.005',STATUS='old')
          n = 18
-c         OPEN(UNIT=kin,FILE='DATAJ2/KFA/ch3cho.006',STATUS='old')
+c         OPEN(UNIT=kin,FILE='tuv/DATAJ2/KFA/ch3cho.006',STATUS='old')
 c         n = 1705
 
          DO i = 1, n
@@ -2877,7 +2890,8 @@ c         n = 1705
 
       IF (myld .EQ. 1) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/CH3CHO/CH3CHO_iup.yld',STATUS='old')
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH3CHO/CH3CHO_iup.yld',
+     &     STATUS='old')
          do i = 1, 4
             read(kin,*)
          enddo
@@ -2916,7 +2930,8 @@ c         n = 1705
 
       ELSEIF (myld .EQ. 2) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/CH3CHO/d021_i.yld',STATUS='old')
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH3CHO/d021_i.yld',
+     &     STATUS='old')
          DO i = 1, 18
             READ(kin,*)
          ENDDO
@@ -2936,7 +2951,8 @@ c         n = 1705
             STOP
          ENDIF
       
-         OPEN(UNIT=kin,FILE='DATAJ1/CH3CHO/d021_ii.yld',STATUS='old')
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH3CHO/d021_ii.yld',
+     &     STATUS='old')
          DO i = 1, 10
             READ(kin,*)
          ENDDO
@@ -2956,7 +2972,8 @@ c         n = 1705
             STOP
          ENDIF
 
-         OPEN(UNIT=kin,FILE='DATAJ1/CH3CHO/d021_iii.yld',STATUS='old')
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH3CHO/d021_iii.yld',
+     &     STATUS='old')
          DO i = 1, 10
             READ(kin,*)
          ENDDO
@@ -2980,7 +2997,7 @@ c         n = 1705
 
 * pressure-dependence parameters
       
-         OPEN(UNIT=kin,FILE='DATAJ1/CH3CHO/CH3CHO_press.yld',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH3CHO/CH3CHO_press.yld',
      $     STATUS='old')
          do i = 1, 4
             read(kin,*)
@@ -3132,7 +3149,7 @@ c         n = 1705
 
       IF (mabs .EQ. 1) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/C2H5CHO/C2H5CHO_iup.abs',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/C2H5CHO/C2H5CHO_iup.abs',
      $        STATUS='old')
          do i = 1, 4
             read(kin,*)
@@ -3159,7 +3176,7 @@ c         n = 1705
 * cross section from KFA tables
 * c2h5cho.001 - Calvert and Pitts 1966
          
-         OPEN(UNIT=kin,FILE='DATAJ2/KFA/c2h5cho.001',STATUS='old')
+         OPEN(UNIT=kin,FILE='tuv/DATAJ2/KFA/c2h5cho.001',STATUS='old')
          n = 83
 
          DO i = 1, n
@@ -3183,7 +3200,7 @@ c         n = 1705
 
       IF (myld .EQ. 1) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/C2H5CHO/C2H5CHO_iup.yld',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/C2H5CHO/C2H5CHO_iup.yld',
      $        STATUS='old')
          do i = 1, 4
             read(kin,*)
@@ -3207,7 +3224,7 @@ c         n = 1705
 
       ELSEIF (myld .EQ. 2) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/C2H5CHO/C2H5CHO_iup05.yld',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/C2H5CHO/C2H5CHO_iup05.yld',
      $        STATUS='old')
          do i = 1, 6
             read(kin,*)
@@ -3231,7 +3248,7 @@ c         n = 1705
 
       ELSEIF (myld .EQ. 3) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/C2H5CHO/C2H5CHO_Chen01.yld',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/C2H5CHO/C2H5CHO_Chen01.yld',
      $        STATUS='old')
          DO i = 1, 11
             read(kin,*)
@@ -3446,7 +3463,7 @@ c         n = 1705
 
       IF (mabs .EQ. 1) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/CHOCHO/CHOCHO_iup.abs',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/CHOCHO/CHOCHO_iup.abs',
      $        STATUS='old')
          DO i = 1, 4
             read(kin,*)
@@ -3475,7 +3492,7 @@ c         n = 1705
 * cross section from KFA tables
 * chocho.001 - Plum et al. 1983
          
-         OPEN(UNIT=kin,FILE='DATAJ2/KFA/chocho.001',STATUS='old')
+         OPEN(UNIT=kin,FILE='tuv/DATAJ2/KFA/chocho.001',STATUS='old')
          n = 219
 
          DO i = 1, n
@@ -3500,7 +3517,7 @@ c         n = 1705
 * HC(O)CO radical. Int. J. Chem. Kinet., 33, 149-156.
 
          OPEN(UNIT=kin,
-     $        FILE='DATAJ1/CHOCHO/glyoxal_orl.abs',STATUS='old')
+     $        FILE='tuv/DATAJ1/CHOCHO/glyoxal_orl.abs',STATUS='old')
 
          do i = 1, 6
             read(kin,*)
@@ -3523,8 +3540,8 @@ c         n = 1705
 
       ELSEIF(mabs .EQ. 4) THEN
 
-         OPEN(UNIT=kin,
-     $        FILE='DATAJ1/CHOCHO/glyoxal_horowitz.abs',STATUS='old')
+         OPEN(UNIT=kin,FILE=
+     $ 'tuv/DATAJ1/CHOCHO/glyoxal_horowitz.abs',STATUS='old')
 
          DO i = 1, 8
             read(kin,*)
@@ -3548,8 +3565,8 @@ c         n = 1705
 
       ELSEIF(mabs .EQ. 5) THEN
 
-         OPEN(UNIT=kin,
-     $        FILE='DATAJ1/CHOCHO/glyoxal_volkamer.abs',STATUS='old')
+         OPEN(UNIT=kin,FILE=
+     $ 'tuv/DATAJ1/CHOCHO/glyoxal_volkamer.abs',STATUS='old')
 
          DO i = 1, 15
             read(kin,*)
@@ -3611,8 +3628,8 @@ c         n = 1705
 *     Using the relative qy as measured @EUPHORE multiplied by the effective qy of 
 *     0.0035 (Volkamer et al. 2005) 
 
-                OPEN(UNIT=kin, FILE
-     $               ='DATAJ1/CHOCHO/glyoxal_RADICALa.yld',STATUS='old')
+                OPEN(UNIT=kin, FILE=
+     $ 'tuv/DATAJ1/CHOCHO/glyoxal_RADICALa.yld',STATUS='old')
 
                 DO i = 1, 14
                    read(kin,*)
@@ -3672,8 +3689,8 @@ c         n = 1705
 * 2:  RADICAL REPORT vI:  Moortgat, G.K. (Ed.), RADICAL:  Evaluation of radical sources 
 *     in atmospheric chemistry through chamber and laboratory studies.
 
-                OPEN(UNIT=kin, FILE
-     $               ='DATAJ1/CHOCHO/glyoxal_RADICALb.yld',STATUS='old')
+                OPEN(UNIT=kin, FILE=
+     $  'tuv/DATAJ1/CHOCHO/glyoxal_RADICALb.yld',STATUS='old')
 
                 DO i = 1, 14
                    read(kin,*)
@@ -3897,7 +3914,7 @@ c         n = 1705
 
       IF (mabs .EQ. 1) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/CH3COCHO/CH3COCHO_iup1.abs',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH3COCHO/CH3COCHO_iup1.abs',
      $        STATUS='old')
          do i = 1, 4
             read(kin,*)
@@ -3919,7 +3936,7 @@ c         n = 1705
             STOP
          ENDIF
 
-         OPEN(UNIT=kin,FILE='DATAJ1/CH3COCHO/CH3COCHO_iup2.abs',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH3COCHO/CH3COCHO_iup2.abs',
      $        STATUS='old')
          do i = 1, 4
             read(kin,*)
@@ -3951,7 +3968,7 @@ c         n = 1705
 
       ELSEIF(mabs .EQ. 2) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/CH3COCHO/CH3COCHO_ncar.abs',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH3COCHO/CH3COCHO_ncar.abs',
      $        STATUS='old')
          n = 271
          DO i = 1, n
@@ -3978,16 +3995,20 @@ c         n = 1705
 * ch3cocho.004 - Staffelbach et al. 1995
          
          IF(mabs .EQ. 3) THEN
-            OPEN(UNIT=kin,FILE='DATAJ2/KFA/ch3cocho.001',STATUS='old')
+            OPEN(UNIT=kin,FILE='tuv/DATAJ2/KFA/ch3cocho.001',
+     &        STATUS='old')
             n = 136
          ELSEIF(mabs .EQ. 4) THEN
-            OPEN(UNIT=kin,FILE='DATAJ2/KFA/ch3cocho.002',STATUS='old')
+            OPEN(UNIT=kin,FILE='tuv/DATAJ2/KFA/ch3cocho.002',
+     &        STATUS='old')
             n = 8251
          ELSEIF(mabs .EQ. 5) THEN
-            OPEN(UNIT=kin,FILE='DATAJ2/KFA/ch3cocho.003',STATUS='old')
+            OPEN(UNIT=kin,FILE='tuv/DATAJ2/KFA/ch3cocho.003',
+     &        STATUS='old')
             n = 275
          ELSEIF(mabs .EQ. 6) THEN
-            OPEN(UNIT=kin,FILE='DATAJ2/KFA/ch3cocho.004',STATUS='old')
+            OPEN(UNIT=kin,FILE='tuv/DATAJ2/KFA/ch3cocho.004',
+     &        STATUS='old')
             n = 162
          ENDIF
          
@@ -4008,7 +4029,7 @@ c         n = 1705
 
          ELSEIF(mabs .EQ. 7) THEN
 
-      OPEN(UNIT=kin,FILE='DATAJ1/CH3COCOCH3/biacetyl_plum.abs',
+      OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH3COCOCH3/biacetyl_plum.abs',
      $     STATUS='old')
       DO i = 1, 7
          READ(kin,*)
@@ -4032,7 +4053,7 @@ c         n = 1705
 
 
          OPEN(UNIT=kin,
-     $        FILE='DATAJ1/CHOCHO/glyoxal_orl.abs',STATUS='old')
+     $        FILE='tuv/DATAJ1/CHOCHO/glyoxal_orl.abs',STATUS='old')
          do i = 1, 6
             read(kin,*)
          enddo
@@ -4058,7 +4079,7 @@ c         n = 1705
 
       ELSEIF(mabs .EQ. 8) THEN
 
-        OPEN(UNIT=kin,FILE='DATAJ1/CH3COCHO/ch3cocho_jpl05.abs',
+        OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH3COCHO/ch3cocho_jpl05.abs',
      $     STATUS='old')
         DO i = 1, 16
            READ(kin,*)
@@ -4085,7 +4106,7 @@ c         n = 1705
 * quantum yields
 
          IF(myld .EQ. 4) THEN
-            OPEN(UNIT=kin,FILE='DATAJ1/CH3COCHO/CH3COCHO_km.yld',
+            OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH3COCHO/CH3COCHO_km.yld',
      $           STATUS='old')
             DO i = 1, 5
                READ(kin,*)
@@ -4122,7 +4143,8 @@ c         n = 1705
 
          ELSEIF(myld .EQ. 6) THEN
 
-            OPEN(UNIT=kin,FILE='DATAJ1/CH3COCHO/CH3COCHO_chen00.yld',
+            OPEN(UNIT=kin,FILE=
+     &           'tuv/DATAJ1/CH3COCHO/CH3COCHO_chen00.yld',
      $           STATUS='old')
 
             DO i = 1, 10
@@ -4380,7 +4402,7 @@ c               kq = 1.93e4 * EXP(-5639/wc(iw))
 
       IF (mabs .EQ. 1) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/CH3COCH3/CH3COCH3_cp.abs',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH3COCH3/CH3COCH3_cp.abs',
      $        STATUS='old')
          DO i = 1, 6
             READ(kin,*)
@@ -4404,7 +4426,7 @@ c               kq = 1.93e4 * EXP(-5639/wc(iw))
 
       ELSEIF(mabs .EQ. 2) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/CH3COCH3/CH3COCH3_iup.abs',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH3COCH3/CH3COCH3_iup.abs',
      $        STATUS='old')
          DO i = 1, 4
             READ(kin,*)
@@ -4428,7 +4450,7 @@ c               kq = 1.93e4 * EXP(-5639/wc(iw))
 
       ELSEIF(mabs .EQ. 3) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/CH3COCH3/CH3COCH3_noaa.abs',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH3COCH3/CH3COCH3_noaa.abs',
      $        STATUS='old')
          DO i = 1, 12
             READ(kin,*)
@@ -4477,7 +4499,8 @@ c               kq = 1.93e4 * EXP(-5639/wc(iw))
 
       ELSEIF(mabs .EQ. 4) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/CH3COCH3/CH3COCH3_gierczak98.abs',
+         OPEN(UNIT=kin,FILE=
+     &        'tuv/DATAJ1/CH3COCH3/CH3COCH3_gierczak98.abs',
      $        STATUS='old')
          DO i = 1, 12
             READ(kin,*)
@@ -4505,7 +4528,7 @@ c               kq = 1.93e4 * EXP(-5639/wc(iw))
 
       IF (myld .EQ. 2) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/CH3COCH3/CH3COCH3_iup.yld',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH3COCH3/CH3COCH3_iup.yld',
      $        STATUS='old')
          DO i = 1, 4
             READ(kin,*)
@@ -4718,13 +4741,13 @@ c               kq = 1.93e4 * EXP(-5639/wc(iw))
 
       IF (mabs .EQ. 1) THEN
 
-c         OPEN(UNIT=kin,FILE='DATAJ1/CH3OOH/CH3OOH_jpl85.abs',
+c         OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH3OOH/CH3OOH_jpl85.abs',
 c     $        STATUS='old')
-c         OPEN(UNIT=kin,FILE='DATAJ1/CH3OOH/CH3OOH_jpl92.abs',
+c         OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH3OOH/CH3OOH_jpl92.abs',
 c     $        STATUS='old')
-c         OPEN(UNIT=kin,FILE='DATAJ1/CH3OOH/CH3OOH_jpl94.abs',
+c         OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH3OOH/CH3OOH_jpl94.abs',
 c     $        STATUS='old')
-         OPEN(UNIT=kin,FILE='DATAJ1/CH3OOH/CH3OOH_jpl94.abs',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH3OOH/CH3OOH_jpl94.abs',
      $        STATUS='old')
          READ(kin,*) idum, n
          DO i = 1, idum-2
@@ -4748,7 +4771,7 @@ c     $        STATUS='old')
 
       ELSEIF (mabs .EQ. 2) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/CH3OOH/CH3OOH_iup.abs',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH3OOH/CH3OOH_iup.abs',
      $        STATUS='old')
          DO i = 1, 4
             READ(kin,*)
@@ -4772,7 +4795,7 @@ c     $        STATUS='old')
 
       ELSEIF (mabs .EQ. 3) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/CH3OOH/CH3OOH_ct.abs',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH3OOH/CH3OOH_ct.abs',
      $        STATUS='old')
          DO i = 1, 4
             READ(kin,*)
@@ -4795,7 +4818,7 @@ c     $        STATUS='old')
 
       ELSEIF (mabs .EQ. 4) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/CH3OOH/CH3OOH_ma.abs',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH3OOH/CH3OOH_ma.abs',
      $        STATUS='old')
          DO i = 1, 4
             READ(kin,*)
@@ -4933,7 +4956,8 @@ c     $        STATUS='old')
 
       IF (mabs .EQ. 1) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/RONO2/CH3ONO2_cp.abs',STATUS='old')
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/RONO2/CH3ONO2_cp.abs',
+     &     STATUS='old')
          DO i = 1, 3
             READ(kin,*)
          ENDDO
@@ -4958,7 +4982,8 @@ c     $        STATUS='old')
 
 *        sigma(T,lambda) = sigma(298,lambda) * exp(B * (T-298))
 
-         OPEN(UNIT=kin,FILE='DATAJ1/RONO2/CH3ONO2_tal.abs',STATUS='old')
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/RONO2/CH3ONO2_tal.abs',
+     &     STATUS='old')
          DO i = 1, 4
             READ(kin,*)
          ENDDO
@@ -4994,7 +5019,7 @@ c     $        STATUS='old')
 
       ELSEIF (mabs .EQ. 3) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/RONO2/CH3ONO2_iup1.abs',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/RONO2/CH3ONO2_iup1.abs',
      $        STATUS='old')
          DO i = 1, 4
             READ(kin,*)
@@ -5021,7 +5046,7 @@ c     $        STATUS='old')
 
 *        sigma(T,lambda) = sigma(298,lambda) * 10**(B * T)
 
-         OPEN(UNIT=kin,FILE='DATAJ1/RONO2/CH3ONO2_iup2.abs',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/RONO2/CH3ONO2_iup2.abs',
      $        STATUS='old')
          DO i = 1, 4
             READ(kin,*)
@@ -5059,7 +5084,7 @@ c     $        STATUS='old')
 
       ELSEIF (mabs .EQ. 5) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/RONO2/CH3ONO2_tay.abs',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/RONO2/CH3ONO2_tay.abs',
      $        STATUS='old')
          DO i = 1, 4
             READ(kin,*)
@@ -5094,7 +5119,7 @@ c     $        STATUS='old')
 
       ELSEIF (mabs .EQ. 7) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/RONO2/CH3ONO2_rat.abs',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/RONO2/CH3ONO2_rat.abs',
      $        STATUS='old')
          DO i = 1, 4
             READ(kin,*)
@@ -5118,7 +5143,7 @@ c     $        STATUS='old')
 
       ELSEIF (mabs .EQ. 8) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/RONO2/CH3ONO2_lib.abs',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/RONO2/CH3ONO2_lib.abs',
      $        STATUS='old')
          DO i = 1, 4
             READ(kin,*)
@@ -5146,7 +5171,7 @@ c     $        STATUS='old')
 
 *        sigma(T,lambda) = sigma(298,lambda) * EXP(B * (T - 298))
 
-         OPEN(UNIT=kin,FILE='DATAJ1/RONO2/CH3ONO2_iup_zj.abs',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/RONO2/CH3ONO2_iup_zj.abs',
      $        STATUS='old')
          DO i = 1, 4
             READ(kin,*)
@@ -5297,7 +5322,7 @@ c     $        STATUS='old')
 
 * cross section from Senum et al., 1984, J.Phys.Chem. 88/7, 1269-1270
 
-C     OPEN(UNIT=kin,FILE='DATAJ1/RONO2/PAN_senum.abs',STATUS='OLD')
+C     OPEN(UNIT=kin,FILE='tuv/DATAJ1/RONO2/PAN_senum.abs',STATUS='OLD')
 C     DO i = 1, 14
 C        READ(kin,*)
 C     ENDDO
@@ -5321,7 +5346,8 @@ C      ENDIF
 * cross section from 
 *      Talukdar et al., 1995, J.Geophys.Res. 100/D7, 14163-14174
 
-      OPEN(UNIT=kin,FILE='DATAJ1/RONO2/PAN_talukdar.abs',STATUS='OLD')
+      OPEN(UNIT=kin,FILE='tuv/DATAJ1/RONO2/PAN_talukdar.abs',
+     &  STATUS='OLD')
       DO i = 1, 14
          READ(kin,*)
       ENDDO
@@ -5447,7 +5473,7 @@ C      ENDIF
 
 *** cross sections from JPL94 recommendation
 
-      OPEN(kin,FILE='DATAJ1/ABS/CCl2O_jpl94.abs',STATUS='OLD')
+      OPEN(kin,FILE='tuv/DATAJ1/ABS/CCl2O_jpl94.abs',STATUS='OLD')
       READ(kin,*) idum, n
       DO i = 1, idum-2
         READ(kin,*)
@@ -5552,7 +5578,7 @@ C      ENDIF
 
 *** cross sections from JPL97 recommendation (identical to 94 data)
 
-      OPEN(kin,FILE='DATAJ1/ABS/CCl4_jpl94.abs',STATUS='OLD')
+      OPEN(kin,FILE='tuv/DATAJ1/ABS/CCl4_jpl94.abs',STATUS='OLD')
       READ(kin,*) idum, n
       DO i = 1, idum-2
         READ(kin,*)
@@ -5657,7 +5683,7 @@ C      ENDIF
 
 *** cross sections from JPL97 recommendation (identical to 94 recommendation)
 
-      OPEN(kin,FILE='DATAJ1/ABS/CClFO_jpl94.abs',STATUS='OLD')
+      OPEN(kin,FILE='tuv/DATAJ1/ABS/CClFO_jpl94.abs',STATUS='OLD')
       READ(kin,*) idum, n
       DO i = 1, idum-2
         READ(kin,*)
@@ -5762,7 +5788,7 @@ C      ENDIF
 
 **** cross sections from JPL97 recommendation (identical to 94 recommendation)
 
-      OPEN(kin,FILE='DATAJ1/ABS/CF2O_jpl94.abs',STATUS='OLD')
+      OPEN(kin,FILE='tuv/DATAJ1/ABS/CF2O_jpl94.abs',STATUS='OLD')
       READ(kin,*) idum, n
       DO i = 1, idum-2
         READ(kin,*)
@@ -5871,7 +5897,7 @@ C      ENDIF
 
 *** cross sections from JPL97 recommendation (identical to 94 recommendation)
 
-      OPEN(kin,FILE='DATAJ1/ABS/CFC-113_jpl94.abs',STATUS='OLD')
+      OPEN(kin,FILE='tuv/DATAJ1/ABS/CFC-113_jpl94.abs',STATUS='OLD')
       READ(kin,*) idum, n
       DO i = 1, idum-2
         READ(kin,*)
@@ -6005,7 +6031,7 @@ C      ENDIF
 
 **** cross sections from JPL97 recommendation (identical to 94 recommendation)
 
-      OPEN(kin,FILE='DATAJ1/ABS/CFC-114_jpl94.abs',STATUS='OLD')
+      OPEN(kin,FILE='tuv/DATAJ1/ABS/CFC-114_jpl94.abs',STATUS='OLD')
       READ(kin,*) idum, n
       DO i = 1, idum-2
         READ(kin,*)
@@ -6135,7 +6161,7 @@ C      ENDIF
 
 **** cross sections from JPL97 recommendation (identical to 94 recommendation)
 
-      OPEN(kin,FILE='DATAJ1/ABS/CFC-115_jpl94.abs',STATUS='OLD')
+      OPEN(kin,FILE='tuv/DATAJ1/ABS/CFC-115_jpl94.abs',STATUS='OLD')
       READ(kin,*) idum, n
       DO i = 1, idum-2
         READ(kin,*)
@@ -6243,7 +6269,7 @@ C      ENDIF
 
 **** cross sections from JPL97 recommendation (identical to 94 recommendation)
 
-      OPEN(kin,FILE='DATAJ1/ABS/CFC-11_jpl94.abs',STATUS='OLD')
+      OPEN(kin,FILE='tuv/DATAJ1/ABS/CFC-11_jpl94.abs',STATUS='OLD')
       READ(kin,*) idum, n
       DO i = 1, idum-2
         READ(kin,*)
@@ -6354,7 +6380,7 @@ C      ENDIF
 
 **** cross sections from JPL97 recommendation (identical to 94 recommendation)
 
-      OPEN(kin,FILE='DATAJ1/ABS/CFC-12_jpl94.abs',STATUS='OLD')
+      OPEN(kin,FILE='tuv/DATAJ1/ABS/CFC-12_jpl94.abs',STATUS='OLD')
       READ(kin,*) idum, n
       DO i = 1, idum-2
         READ(kin,*)
@@ -6463,7 +6489,7 @@ C      ENDIF
       
       j = j+1
       jlabel(j) = 'CH3Br -> Products'
-      OPEN(kin,FILE='DATAJ1/ABS/CH3Br_jpl94.abs',STATUS='OLD')
+      OPEN(kin,FILE='tuv/DATAJ1/ABS/CH3Br_jpl94.abs',STATUS='OLD')
       READ(kin,*) idum, n
       DO i = 1, idum-2
         READ(kin,*)
@@ -6574,7 +6600,7 @@ C      ENDIF
 
 **** cross sections from JPL97 recommendation (identical to 94 recommendation)
 
-      OPEN(kin,FILE='DATAJ1/ABS/CH3CCl3_jpl94.abs',STATUS='OLD')
+      OPEN(kin,FILE='tuv/DATAJ1/ABS/CH3CCl3_jpl94.abs',STATUS='OLD')
       READ(kin,*) idum, n
       DO i = 1, idum-2
         READ(kin,*)
@@ -6732,7 +6758,7 @@ C      ENDIF
 
 **** cross sections from JPL97 recommendation (identical to 94 recommendation)
 
-      OPEN(kin,FILE='DATAJ1/ABS/CH3Cl_jpl94.abs',STATUS='OLD')
+      OPEN(kin,FILE='tuv/DATAJ1/ABS/CH3Cl_jpl94.abs',STATUS='OLD')
       READ(kin,*) idum, n
       DO i = 1, idum-2
         READ(kin,*)
@@ -6887,7 +6913,7 @@ C     INTEGER n1, n2, n3, n4, n5
 
 **** cross sections from JPL97 recommendation (identical to 94 recommendation)
 
-      OPEN(kin,FILE='DATAJ1/ABS/ClOO_jpl94.abs',STATUS='OLD')
+      OPEN(kin,FILE='tuv/DATAJ1/ABS/ClOO_jpl94.abs',STATUS='OLD')
       READ(kin,*) idum, n
       DO i = 1, idum-2
         READ(kin,*)
@@ -6989,7 +7015,7 @@ C     INTEGER n1, n2, n3, n4, n5
 
 **** cross sections from JPL94 recommendation
 
-C     OPEN(kin,FILE='DATAJ1/ABS/HCFC-123_jpl94.abs',STATUS='OLD')
+C     OPEN(kin,FILE='tuv/DATAJ1/ABS/HCFC-123_jpl94.abs',STATUS='OLD')
 C     READ(kin,*) idum, n
 C     DO i = 1, idum-2
 C       READ(kin,*)
@@ -7024,7 +7050,7 @@ C     ENDDO
 
 **** cross section from Orlando et al., 1991
 
-      OPEN(kin,FILE='DATAJ1/ABS/HCFCs_orl.abs',STATUS='OLD')
+      OPEN(kin,FILE='tuv/DATAJ1/ABS/HCFCs_orl.abs',STATUS='OLD')
       READ(kin,*) idum
       DO i = 1, idum-2
         READ(kin,*)
@@ -7140,7 +7166,7 @@ C the measurements beyond 220 nm are very large (Orlando, priv.comm.)
 
 **** cross sections from JPL94 recommendation
 
-C     OPEN(kin,FILE='DATAJ1/ABS/HCFC-124_jpl94.abs',STATUS='OLD')
+C     OPEN(kin,FILE='tuv/DATAJ1/ABS/HCFC-124_jpl94.abs',STATUS='OLD')
 C     READ(kin,*) idum, n
 C     DO i = 1, idum-2
 C       READ(kin,*)
@@ -7174,7 +7200,7 @@ C     ENDDO
 
 **** cross section from Orlando et al., 1991
 
-      OPEN(kin,FILE='DATAJ1/ABS/HCFCs_orl.abs',STATUS='OLD')
+      OPEN(kin,FILE='tuv/DATAJ1/ABS/HCFCs_orl.abs',STATUS='OLD')
       READ(kin,*) idum
       idum = idum+5
       DO i = 1, idum-2
@@ -7289,7 +7315,7 @@ C     ENDDO
 
 **** cross sections from JPL97 recommendation (identical to 94 recommendation)
 
-      OPEN(kin,FILE='DATAJ1/ABS/HCFC-141b_jpl94.abs',STATUS='OLD')
+      OPEN(kin,FILE='tuv/DATAJ1/ABS/HCFC-141b_jpl94.abs',STATUS='OLD')
       READ(kin,*) idum, n
       DO i = 1, idum-2
         READ(kin,*)
@@ -7393,7 +7419,7 @@ C     ENDDO
 
 **** cross sections from JPL94 recommendation
 
-C     OPEN(kin,FILE='DATAJ1/ABS/HCFC-142b_jpl94.abs',STATUS='OLD')
+C     OPEN(kin,FILE='tuv/DATAJ1/ABS/HCFC-142b_jpl94.abs',STATUS='OLD')
 C     READ(kin,*) idum, n
 C     DO i = 1, idum-2
 C       READ(kin,*)
@@ -7427,7 +7453,7 @@ C     ENDDO
 
 **** cross section from Orlando et al., 1991
 
-      OPEN(kin,FILE='DATAJ1/ABS/HCFCs_orl.abs',STATUS='OLD')
+      OPEN(kin,FILE='tuv/DATAJ1/ABS/HCFCs_orl.abs',STATUS='OLD')
       READ(kin,*) idum
       idum = idum+10
       DO i = 1, idum-2
@@ -7553,7 +7579,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
 
 **** cross sections from JPL97 recommendation (identical to 94 recommendation)
 
-      OPEN(kin,FILE='DATAJ1/ABS/HCFC-225ca_jpl94.abs',STATUS='OLD')
+      OPEN(kin,FILE='tuv/DATAJ1/ABS/HCFC-225ca_jpl94.abs',STATUS='OLD')
       READ(kin,*) idum, n
       DO i = 1, idum-2
         READ(kin,*)
@@ -7661,7 +7687,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
 
 **** cross sections from JPL97 recommendation (identical to 94 recommendation)
 
-      OPEN(kin,FILE='DATAJ1/ABS/HCFC-225cb_jpl94.abs',STATUS='OLD')
+      OPEN(kin,FILE='tuv/DATAJ1/ABS/HCFC-225cb_jpl94.abs',STATUS='OLD')
       READ(kin,*) idum, n
       DO i = 1, idum-2
         READ(kin,*)
@@ -7772,7 +7798,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
 
 **** cross sections from JPL97 recommendation (identical to 94 recommendation)
 
-      OPEN(kin,FILE='DATAJ1/ABS/HCFC-22_jpl94.abs',STATUS='OLD')
+      OPEN(kin,FILE='tuv/DATAJ1/ABS/HCFC-22_jpl94.abs',STATUS='OLD')
       READ(kin,*) idum, n
       DO i = 1, idum-2
         READ(kin,*)
@@ -7971,7 +7997,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
 
 **** cross sections from JPL97 recommendation (identical to 94 recommendation)
 
-      OPEN(kin,FILE='DATAJ1/ABS/HO2_jpl94.abs',STATUS='OLD')
+      OPEN(kin,FILE='tuv/DATAJ1/ABS/HO2_jpl94.abs',STATUS='OLD')
       READ(kin,*) idum, n
       DO i = 1, idum-2
         READ(kin,*)
@@ -8087,7 +8113,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
 
 **** cross sections from JPL97 recommendation (identical to 94 recommendation)
 
-      OPEN(kin,FILE='DATAJ1/ABS/Halon-1202_jpl97.abs',STATUS='OLD')
+      OPEN(kin,FILE='tuv/DATAJ1/ABS/Halon-1202_jpl97.abs',STATUS='OLD')
       READ(kin,*) idum, n
       DO i = 1, idum-2
         READ(kin,*)
@@ -8195,7 +8221,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
 
 **** cross sections from JPL97 recommendation (identical to 94 recommendation)
 
-      OPEN(kin,FILE='DATAJ1/ABS/Halon-1211_jpl97.abs',STATUS='OLD')
+      OPEN(kin,FILE='tuv/DATAJ1/ABS/Halon-1211_jpl97.abs',STATUS='OLD')
       READ(kin,*) idum, n
       DO i = 1, idum-2
         READ(kin,*)
@@ -8303,7 +8329,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
 
 **** cross sections from JPL97 recommendation (identical to 94 recommendation)
 
-      OPEN(kin,FILE='DATAJ1/ABS/Halon-1301_jpl97.abs',STATUS='OLD')
+      OPEN(kin,FILE='tuv/DATAJ1/ABS/Halon-1301_jpl97.abs',STATUS='OLD')
       READ(kin,*) idum, n
       DO i = 1, idum-2
         READ(kin,*)
@@ -8412,7 +8438,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
 
 **** cross sections from JPL97 recommendation (identical to 94 recommendation)
 
-      OPEN(kin,FILE='DATAJ1/ABS/Halon-2402_jpl97.abs',STATUS='OLD')
+      OPEN(kin,FILE='tuv/DATAJ1/ABS/Halon-2402_jpl97.abs',STATUS='OLD')
       READ(kin,*) idum, n
       DO i = 1, idum-2
         READ(kin,*)
@@ -8627,7 +8653,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
 
 *** cross sections from JPL97 recommendation
 
-      OPEN(kin,FILE='DATAJ1/ABS/ClONO2_jpl97.abs',STATUS='OLD')
+      OPEN(kin,FILE='tuv/DATAJ1/ABS/ClONO2_jpl97.abs',STATUS='OLD')
       n = 119
       DO i = 1, n
         READ(kin,*) x1(i), y1(i), y2(i), y3(i)
@@ -8774,7 +8800,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
 
 *** cross sections from JPL03 recommendation
 
-      OPEN(kin,FILE='DATAJ1/ABS/BrONO2_jpl03.abs',STATUS='OLD')
+      OPEN(kin,FILE='tuv/DATAJ1/ABS/BrONO2_jpl03.abs',STATUS='OLD')
       DO i = 1, 13
          READ(kin,*)
       ENDDO
@@ -8884,7 +8910,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
 *** cross sections from JPL97 recommendation (as tab by Finlayson-Pitts
 * and Pitts, 1999.
 
-      OPEN(kin,FILE='DATAJ1/ABS/CL2_fpp.abs',STATUS='OLD')
+      OPEN(kin,FILE='tuv/DATAJ1/ABS/CL2_fpp.abs',STATUS='OLD')
       do i = 1, 5
          read(kin,*)
       enddo
@@ -9005,7 +9031,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
       
       IF(mabs. EQ. 1)THEN
 
-      OPEN(UNIT=kin,FILE='DATAJ1/CH2OHCHO/glycolaldehyde.abs',
+      OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH2OHCHO/glycolaldehyde.abs',
      $     STATUS='old')
       DO i = 1, 15
          READ(kin,*)
@@ -9028,7 +9054,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
 
       ELSEIF(mabs. EQ. 2)THEN
  
-         OPEN(UNIT=kin,FILE='DATAJ1/CH2OHCHO/glycald_jpl05.abs',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH2OHCHO/glycald_jpl05.abs',
      $      STATUS='old')
          DO i = 1, 9
             READ(kin,*)
@@ -9162,7 +9188,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
       jlabel(j) = 'CH3COCOCH3 -> Products'
 
       IF( mabs. EQ. 1) THEN
-         OPEN(UNIT=kin,FILE='DATAJ1/CH3COCOCH3/biacetyl_plum.abs',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH3COCOCH3/biacetyl_plum.abs',
      $        STATUS='old')
          DO i = 1, 7
             READ(kin,*)
@@ -9185,8 +9211,9 @@ c             sq(j,iz,iw) = qy * EXP(sum)
          ENDIF
 
       ELSEIF(mabs. EQ. 2) THEN
-         OPEN(UNIT=kin,FILE='DATAJ1/CH3COCOCH3/biacetyl_horowitz.abs',
-     $        STATUS='old')
+         OPEN(UNIT=kin,FILE=
+     &     'tuv/DATAJ1/CH3COCOCH3/biacetyl_horowitz.abs',
+     $     STATUS='old')
          DO i = 1, 8
             READ(kin,*)
          ENDDO
@@ -9314,7 +9341,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
       mabs = 2
 
       IF( mabs. EQ. 1) THEN
-      OPEN(UNIT=kin,FILE='DATAJ1/ABS/methylvinylketone.abs',
+      OPEN(UNIT=kin,FILE='tuv/DATAJ1/ABS/methylvinylketone.abs',
      $     STATUS='old')
       DO i = 1, 9
          READ(kin,*)
@@ -9337,7 +9364,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
 
       ELSEIF(mabs. EQ. 2) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/ABS/mvk_gierczak97.abs',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/ABS/mvk_gierczak97.abs',
      $        STATUS='old')
          DO i = 1, 15
             READ(kin,*)
@@ -9470,7 +9497,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
 * cross section from 
 *      JPL 2006 (originally from Gierczak et al.)
 
-      OPEN(UNIT=kin,FILE='DATAJ1/ABS/Methacrolein_jpl2007.txt',
+      OPEN(UNIT=kin,FILE='tuv/DATAJ1/ABS/Methacrolein_jpl2007.txt',
      $    STATUS='OLD')
       DO i = 1, 7
          READ(kin,*)
@@ -9619,7 +9646,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
 
       IF( mabs. EQ. 1) THEN
 
-      OPEN(UNIT=kin,FILE='DATAJ1/CH3COCOOH/pyruvic_horowitz.abs',
+      OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH3COCOOH/pyruvic_horowitz.abs',
      $     STATUS='old')
       DO i = 1, 8
          READ(kin,*)
@@ -9643,7 +9670,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
 
       ELSEIF (mabs. EQ. 2) THEN
       
-         OPEN(UNIT=kin,FILE='DATAJ1/CH3COCOOH/pyruvic_JPL05.abs',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/CH3COCOOH/pyruvic_JPL05.abs',
      $        STATUS='old')
          DO i = 1, 10
             READ(kin,*)
@@ -9777,7 +9804,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
 
       IF( mabs. EQ. 1) THEN
 
-      OPEN(UNIT=kin,FILE='DATAJ1/RONO2/RONO2_talukdar.abs',
+      OPEN(UNIT=kin,FILE='tuv/DATAJ1/RONO2/RONO2_talukdar.abs',
      $     STATUS='old')
       DO i = 1, 10
          READ(kin,*)
@@ -9814,7 +9841,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
 
       ELSEIF( mabs. EQ. 2) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/RONO2/RONO2_iupac05.abs',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/RONO2/RONO2_iupac05.abs',
      $        STATUS='old')
          DO i = 1, 10
             READ(kin,*) 
@@ -9974,7 +10001,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
 
       IF( mabs. EQ. 1) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/RONO2/RONO2_talukdar.abs',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/RONO2/RONO2_talukdar.abs',
      $     STATUS='old')
          DO i = 1, 10
             READ(kin,*)
@@ -10016,7 +10043,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
 
       ELSEIF( mabs. EQ. 2) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/RONO2/iC3H7ONO2_iupac05.abs',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/RONO2/iC3H7ONO2_iupac05.abs',
      $        STATUS='old')
          DO i = 1, 8
             READ(kin,*) 
@@ -10045,7 +10072,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
             STOP
          ENDIF
 
-         OPEN(UNIT=kin,FILE='DATAJ1/RONO2/iC3H7ONO2_B_iupac05.abs',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/RONO2/iC3H7ONO2_B_iupac05.abs',
      $        STATUS='old')
          DO i = 1, 9
             READ(kin,*) 
@@ -10324,7 +10351,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
 
       ELSEIF( mabs. EQ. 2) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/RONO2/NOA_barnes93.abs',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/RONO2/NOA_barnes93.abs',
      $        STATUS='old')
          DO i = 1, 10
             READ(kin,*) 
@@ -10538,7 +10565,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
       j = j+1
       jlabel(j) = 'ClOOCl -> Cl + ClOO'
 
-      OPEN(UNIT=kin,FILE='DATAJ1/ABS/CLOOCL_jpl02.abs',
+      OPEN(UNIT=kin,FILE='tuv/DATAJ1/ABS/CLOOCL_jpl02.abs',
      $     STATUS='old')
       DO i = 1, 25
          READ(kin,*)
@@ -10649,7 +10676,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
       j = j+1
       jlabel(j) = 'CH2(OH)COCH3 -> CH2(OH)CO + CH3'
 
-      OPEN(UNIT=kin,FILE='DATAJ1/ABS/Hydroxyacetone.abs',
+      OPEN(UNIT=kin,FILE='tuv/DATAJ1/ABS/Hydroxyacetone.abs',
      $     STATUS='old')
       DO i = 1, 8
          READ(kin,*)
@@ -10824,7 +10851,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
       j = j+1
       jlabel(j) = 'BrO -> Br + O'
 
-      OPEN(UNIT=kin,FILE='DATAJ1/ABS/BrO.jpl03',
+      OPEN(UNIT=kin,FILE='tuv/DATAJ1/ABS/BrO.jpl03',
      $     STATUS='old')
       DO i = 1, 14
          READ(kin,*)
@@ -10918,7 +10945,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
 * bromine, bromine chloride, iodine chloride, and iodine bromide, J. Phys. 
 * Chem. 68, p. 2263 (1964).
 
-      OPEN(UNIT=kin,FILE='DATAJ1/ABS/Br2.abs',
+      OPEN(UNIT=kin,FILE='tuv/DATAJ1/ABS/Br2.abs',
      $     STATUS='old')
 
       DO i = 1, 6
@@ -11008,7 +11035,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
 
 
 *** NO3-(aq) cross sections from Burley & Johnston (header lines = 24, data lines = 19)
-      OPEN(kin,FILE='DATAJ1/ABS/NO3-_BJ92.abs',STATUS='OLD')
+      OPEN(kin,FILE='tuv/DATAJ1/ABS/NO3-_BJ92.abs',STATUS='OLD')
 
       n = 24
       DO i = 1, n
@@ -11132,7 +11159,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
       jlabel(j) = 'CH3COCH2CH3 -> CH3CO + CH2CH3'
 
 
-      OPEN(UNIT=kin,FILE='DATAJ1/ABS/Martinez.abs',
+      OPEN(UNIT=kin,FILE='tuv/DATAJ1/ABS/Martinez.abs',
      $     STATUS='old')
       DO i = 1, 4
          READ(kin,*)
@@ -11252,7 +11279,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
 * cross section from 
 *      JPL 2006 (originally from Harwood et al. 2003)
 
-      OPEN(UNIT=kin,FILE='DATAJ1/ABS/PPN_Harwood.txt',STATUS='OLD')
+      OPEN(UNIT=kin,FILE='tuv/DATAJ1/ABS/PPN_Harwood.txt',STATUS='OLD')
       DO i = 1, 10
          READ(kin,*)
       ENDDO
@@ -11381,7 +11408,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
 * cross section from 
 *      JPL 2006 (originally from Bauerle and Moortgat 1999)
 
-      OPEN(UNIT=kin,FILE='DATAJ1/ABS/HOCH2OOH.txt',STATUS='OLD')
+      OPEN(UNIT=kin,FILE='tuv/DATAJ1/ABS/HOCH2OOH.txt',STATUS='OLD')
       DO i = 1, 4
          READ(kin,*)
       ENDDO
@@ -11494,7 +11521,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
 * cross section from 
 *      JPL 2006 (originally from Magneron et al.)
 
-      OPEN(UNIT=kin,FILE='DATAJ1/ABS/Acrolein.txt',STATUS='OLD')
+      OPEN(UNIT=kin,FILE='tuv/DATAJ1/ABS/Acrolein.txt',STATUS='OLD')
       DO i = 1, 6
          READ(kin,*)
       ENDDO
@@ -11614,7 +11641,8 @@ c             sq(j,iz,iw) = qy * EXP(sum)
 * cross section from 
 *      JPL 2006 (originally from Orlando and Tyndall 2003)
 
-      OPEN(UNIT=kin,FILE='DATAJ1/ABS/Peracetic_acid.txt',STATUS='OLD')
+      OPEN(UNIT=kin,FILE='tuv/DATAJ1/ABS/Peracetic_acid.txt',
+     &  STATUS='OLD')
       DO i = 1, 6
          READ(kin,*)
       ENDDO
@@ -11770,7 +11798,8 @@ c             sq(j,iz,iw) = qy * EXP(sum)
        IF(mabs .EQ. 1) THEN
 
             OPEN(UNIT=kin,FILE=
-     >            'DATAJ1/C3H7CHO/C3H7CHO_Martinez.abs',STATUS='old')
+     >            'tuv/DATAJ1/C3H7CHO/C3H7CHO_Martinez.abs',
+     &            STATUS='old')
             DO i = 1, 10
                READ(kin,*)
             ENDDO
@@ -11941,7 +11970,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
       IF (mabs .EQ. 1) THEN
 
          OPEN(UNIT=kin,FILE=
-     >    'DATAJ1/C3H7CHO/i_C3H7CHO_Martinez.abs', STATUS='old')
+     >    'tuv/DATAJ1/C3H7CHO/i_C3H7CHO_Martinez.abs', STATUS='old')
          do i = 1, 10
             read(kin,*)
          enddo
@@ -11965,7 +11994,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
       ELSEIF(mabs .EQ. 2) THEN
 
          OPEN(UNIT=kin,FILE=
-     >    'DATAJ1/C3H7CHO/i_C3H7CHO_Chen.abs', STATUS='old')
+     >    'tuv/DATAJ1/C3H7CHO/i_C3H7CHO_Chen.abs', STATUS='old')
       
          DO i = 1, 10
             read(kin,*)
@@ -11996,7 +12025,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
       IF (myld .EQ. 1) THEN
 
          OPEN(UNIT=kin,FILE=
-     >     'DATAJ1/C3H7CHO/i_C3H7CHO_Chen.yld', STATUS='old')
+     >     'tuv/DATAJ1/C3H7CHO/i_C3H7CHO_Chen.yld', STATUS='old')
 
          DO i = 1, 8
             read(kin,*)
@@ -12166,7 +12195,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
        IF(mabs .EQ. 1) THEN
 
             OPEN(UNIT=kin,FILE=
-     >            'DATAJ1/C4H9CHO/C4H9CHO_Tadic.abs',STATUS='old')
+     >            'tuv/DATAJ1/C4H9CHO/C4H9CHO_Tadic.abs',STATUS='old')
             DO i = 1, 10
                READ(kin,*)
             ENDDO
@@ -12365,7 +12394,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
        IF(mabs .EQ. 1) THEN
 
             OPEN(UNIT=kin,FILE=
-     >            'DATAJ1/C4H9CHO/i_C4H9CHO_Zhu.abs',STATUS='old')
+     >            'tuv/DATAJ1/C4H9CHO/i_C4H9CHO_Zhu.abs',STATUS='old')
             DO i = 1, 10
                READ(kin,*)
             ENDDO
@@ -12531,7 +12560,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
       IF (mabs .EQ. 1) THEN
 
          OPEN(UNIT=kin,FILE=
-     >    'DATAJ1/C4H9CHO/t_C4H9CHO_Zhu.abs', STATUS='old')
+     >    'tuv/DATAJ1/C4H9CHO/t_C4H9CHO_Zhu.abs', STATUS='old')
          do i = 1, 10
             read(kin,*)
          enddo
@@ -12559,7 +12588,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
       IF (myld .EQ. 1) THEN
 
          OPEN(UNIT=kin,FILE=
-     >     'DATAJ1/C4H9CHO/t_C4H9CHO_Zhu.yld', STATUS='old')
+     >     'tuv/DATAJ1/C4H9CHO/t_C4H9CHO_Zhu.yld', STATUS='old')
 
          DO i = 1, 10
             read(kin,*)
@@ -12730,7 +12759,8 @@ c             sq(j,iz,iw) = qy * EXP(sum)
        IF(mabs .EQ. 1) THEN
 
             OPEN(UNIT=kin,FILE=
-     >            'DATAJ1/C5H11CHO/C5H11CHO_Plagens.abs',STATUS='old')
+     >            'tuv/DATAJ1/C5H11CHO/C5H11CHO_Plagens.abs',
+     &            STATUS='old')
             DO i = 1, 14
                READ(kin,*)
             ENDDO
@@ -12756,7 +12786,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
         ELSEIF(mabs .EQ. 2) THEN
 
            OPEN(UNIT=kin,FILE=
-     >      'DATAJ1/C5H11CHO/C5H11CHO_Tang.abs', STATUS='old')
+     >      'tuv/DATAJ1/C5H11CHO/C5H11CHO_Tang.abs', STATUS='old')
       
            DO i = 1, 12
             read(kin,*)
@@ -12942,7 +12972,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
        IF(mabs .EQ. 1) THEN
 
             OPEN(UNIT=kin,FILE=
-     >            'DATAJ1/C6H13CHO/C6H13CHO_Tang.abs',STATUS='old')
+     >            'tuv/DATAJ1/C6H13CHO/C6H13CHO_Tang.abs',STATUS='old')
             DO i = 1, 12
                READ(kin,*)
             ENDDO
@@ -13128,7 +13158,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
          IF(mabs .EQ. 1) THEN
 
             OPEN(UNIT=kin,FILE=
-     >            'DATAJ1/CH3COC2H5/CH3COC2H5_Martinez.abs',
+     > 'tuv/DATAJ1/CH3COC2H5/CH3COC2H5_Martinez.abs',
      > STATUS='old')
             DO i = 1, 11
                READ(kin,*)
@@ -13153,7 +13183,8 @@ c             sq(j,iz,iw) = qy * EXP(sum)
          ELSEIF(mabs .EQ. 2) THEN
 
             OPEN(UNIT=kin,FILE=
-     >            'DATAJ1/CH3COC2H5/CH3COC2H5_Yujing.abs',STATUS='old')
+     >            'tuv/DATAJ1/CH3COC2H5/CH3COC2H5_Yujing.abs',
+     &            STATUS='old')
             DO i = 1, 11
                READ(kin,*)
             ENDDO
@@ -13334,7 +13365,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
          IF(mabs .EQ. 1) THEN
 
             OPEN(UNIT=kin,FILE=
-     >            'DATAJ1/pinonaldehyde/pinal_hallquist.abs',
+     >            'tuv/DATAJ1/pinonaldehyde/pinal_hallquist.abs',
      > STATUS='old')
             DO i = 1, 11
                READ(kin,*)
@@ -13523,7 +13554,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
          IF(mabs .EQ. 1) THEN
 
             OPEN(UNIT=kin,FILE=
-     >            'DATAJ1/acrolein/magneron.abs',STATUS='old')
+     >            'tuv/DATAJ1/acrolein/magneron.abs',STATUS='old')
             DO i = 1, 13
                READ(kin,*)
             ENDDO
@@ -13546,7 +13577,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
         ELSEIF(mabs .EQ. 2) THEN
         
             OPEN(UNIT=kin,FILE=
-     >            'DATAJ1/acrolein/radical.abs',STATUS='old')
+     >            'tuv/DATAJ1/acrolein/radical.abs',STATUS='old')
             DO i = 1, 14
                READ(kin,*)
             ENDDO
@@ -13675,7 +13706,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
 
       IF( mabs. EQ. 1) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/RONO2/nC3H7ONO2_iupac05.abs',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/RONO2/nC3H7ONO2_iupac05.abs',
      $        STATUS='old')
          DO i = 1, 8
             READ(kin,*) 
@@ -13814,7 +13845,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
 
       IF( mabs. EQ. 1) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/RONO2/nC4H9ONO2_average.abs',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/RONO2/nC4H9ONO2_average.abs',
      $        STATUS='old')
          DO i = 1, 13
             READ(kin,*) 
@@ -13940,7 +13971,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
 
       IF( mabs. EQ. 1) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/RONO2/iC4H9ONO2_clem.abs',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/RONO2/iC4H9ONO2_clem.abs',
      $        STATUS='old')
          DO i = 1, 11
             READ(kin,*) 
@@ -14065,7 +14096,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
 
       IF( mabs. EQ. 1) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/RONO2/2_C4H9ONO2_iupac05.abs',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/RONO2/2_C4H9ONO2_iupac05.abs',
      $        STATUS='old')
          DO i = 1, 8
             READ(kin,*) 
@@ -14195,7 +14226,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
 
       IF( mabs. EQ. 1) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/RONO2/nC5H11ONO2_average.abs',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/RONO2/nC5H11ONO2_average.abs',
      $        STATUS='old')
          DO i = 1, 11
             READ(kin,*) 
@@ -14321,7 +14352,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
 
       IF( mabs. EQ. 1) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/RONO2/2_C5H11ONO2_roberts.abs',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/RONO2/2_C5H11ONO2_roberts.abs',
      $        STATUS='old')
          DO i = 1, 8
             READ(kin,*) 
@@ -14556,7 +14587,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
 
       IF( mabs. EQ. 1) THEN
 
-         OPEN(UNIT=kin,FILE='DATAJ1/RONO2/i_C5H11ONO2_turberg.abs',
+         OPEN(UNIT=kin,FILE='tuv/DATAJ1/RONO2/i_C5H11ONO2_turberg.abs',
      $        STATUS='old')
          DO i = 1, 11
             READ(kin,*) 
@@ -15512,7 +15543,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
          IF(mabs .EQ. 1) THEN
 
             OPEN(UNIT=kin,FILE=
-     >            'DATAJ1/crotonaldehyde/magneron.abs',STATUS='old')
+     >            'tuv/DATAJ1/crotonaldehyde/magneron.abs',STATUS='old')
             DO i = 1, 13
                READ(kin,*)
             ENDDO
@@ -15693,7 +15724,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
          IF(mabs .EQ. 1) THEN
 
             OPEN(UNIT=kin,FILE=
-     >            'DATAJ1/CH3COC3H7/CH3COC3H7_Martinez.abs',
+     >            'tuv/DATAJ1/CH3COC3H7/CH3COC3H7_Martinez.abs',
      > STATUS='old')
             DO i = 1, 11
                READ(kin,*)
@@ -15886,7 +15917,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
          IF(mabs .EQ. 1) THEN
 
             OPEN(UNIT=kin,FILE=
-     >            'DATAJ1/C2H5COC2H5/C2H5COC2H5_Martinez.abs',
+     >            'tuv/DATAJ1/C2H5COC2H5/C2H5COC2H5_Martinez.abs',
      > STATUS='old')
             DO i = 1, 11
                READ(kin,*)
@@ -16085,7 +16116,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
          IF(mabs .EQ. 1) THEN
 
             OPEN(UNIT=kin,FILE=
-     >           'DATAJ1/((CH3)2CH)2CO/((CH3)2CH)2CO_Yujing.abs',
+     >           'tuv/DATAJ1/((CH3)2CH)2CO/((CH3)2CH)2CO_Yujing.abs',
      > STATUS='old')
             DO i = 1, 11
                READ(kin,*)
@@ -16288,8 +16319,8 @@ c             sq(j,iz,iw) = qy * EXP(sum)
 
          IF(mabs .EQ. 1) THEN
 
-            OPEN(UNIT=kin, 
-     & FILE='DATAJ1/CH3C(O)CH2CH(CH3)2/CH3C(O)CH2CH(CH3)2_Yujing.abs',
+            OPEN(UNIT=kin,FILE=
+     & 'tuv/DATAJ1/CH3C(O)CH2CH(CH3)2/CH3C(O)CH2CH(CH3)2_Yujing.abs',
      & STATUS='old')
             DO i = 1, 11
                READ(kin,*)
@@ -16501,7 +16532,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
          IF(mabs .EQ. 1) THEN
 
             OPEN(UNIT=kin,
-     & FILE='DATAJ1/CH3C(O)C3H5(CH3)2/CH3C(O)C3H5(CH3)2_Yujing.abs',
+     & FILE='tuv/DATAJ1/CH3C(O)C3H5(CH3)2/CH3C(O)C3H5(CH3)2_Yujing.abs',
      & STATUS='old')
             DO i = 1, 11
                READ(kin,*)
@@ -16702,7 +16733,7 @@ c             sq(j,iz,iw) = qy * EXP(sum)
 
          IF(mabs .EQ. 1) THEN
 
-            OPEN(UNIT=kin,FILE='DATAJ1/RONO2/CH3O2NO2_iup05.abs',
+            OPEN(UNIT=kin,FILE='tuv/DATAJ1/RONO2/CH3O2NO2_iup05.abs',
      $           STATUS='old')
             DO i = 1, 7
                READ(kin,*)

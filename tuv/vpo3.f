@@ -95,7 +95,7 @@
 * in this section (Section 1) should be replaced accordingly
 
       WRITE(kout,*) 'ozone profile: USSA, 1976'
-      OPEN(kin,FILE='DATAE1/ATM/ussa.ozone',STATUS='old')
+      OPEN(kin,FILE='tuv/DATAE1/ATM/ussa.ozone',STATUS='old')
       DO i = 1, 7
         READ(kin,*)
       ENDDO

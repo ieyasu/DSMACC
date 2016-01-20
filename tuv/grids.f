@@ -98,7 +98,7 @@
 c      wlabel = 'isaksen.grid'
       wlabel = 'combined.grid'
 
-      fi = 'DATAE1/GRIDS/'//wlabel
+      fi = 'tuv/DATAE1/GRIDS/'//wlabel
       OPEN(unit=kin,file=fi,status='old')
       READ(kin,*) nw
       DO iw = 1, nw
@@ -137,7 +137,7 @@ c      wlabel = 'isaksen.grid'
  4    CONTINUE
       wlabel = 'fast-TUV tropospheric grid'
       
-      fi = 'DATAE1/GRIDS/fast_tuv.grid'
+      fi = 'tuv/DATAE1/GRIDS/fast_tuv.grid'
       OPEN(UNIT=kin,FILE=fi,STATUS='old')
       DO iw = 1, 4
          READ(kin,*)

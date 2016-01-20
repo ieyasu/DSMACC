@@ -573,7 +573,7 @@ C       locals
         IN_LUN = 11
 
 	OPEN (UNIT=IN_LUN, FILE=
-     $       'DATAE1/O2/effxstex.txt',FORM='FORMATTED')
+     $       'tuv/DATAE1/O2/effxstex.txt',FORM='FORMATTED')
 
 	READ( IN_LUN, 901 )
 	DO I = 1,20

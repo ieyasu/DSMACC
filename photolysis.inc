@@ -186,7 +186,7 @@ REAL(kind=dp) FUNCTION ZENITH ( LAT, LONG, JDAY )
     IF ( IN .EQ. 0 ) THEN
         IJD = IDAY
     ELSE IF ( IN .GT. 0 ) THEN      
-        DO 101 I = 1, IN
+        DO I = 1, IN
             IJD = IJD + IMN( I )
         END DO
         IJD = IJD + IDAY

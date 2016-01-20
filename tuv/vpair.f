@@ -78,7 +78,7 @@
 
       WRITE(kout,*) 'air concentrations: USSA, 1976'
 
-      OPEN(kin,FILE='DATAE1/ATM/ussa.dens',STATUS='old')
+      OPEN(kin,FILE='tuv/DATAE1/ATM/ussa.dens',STATUS='old')
       DO i = 1, 3
          READ(kin,*)
       ENDDO

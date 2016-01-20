@@ -97,7 +97,7 @@
 
       j = j + 1
       label(j) = 'DNA damage, in vitro (Setlow, 1974)'
-      OPEN(UNIT=kin,FILE='DATAS1/dna.setlow.new',STATUS='old')
+      OPEN(UNIT=kin,FILE='tuv/DATAS1/dna.setlow.new',STATUS='old')
       do i = 1, 11
          read(kin,*)
       enddo
@@ -144,7 +144,7 @@
 
       j = j + 1
       label(j) = 'SCUP-human (de Gruijl and van der Leun, 1994)'
-      OPEN(UNIT=kin,FILE='DATAS1/SCUP-h',STATUS='old')
+      OPEN(UNIT=kin,FILE='tuv/DATAS1/SCUP-h',STATUS='old')
       n = 28
       DO i = 1, n
          READ(kin,*) x1(i), y1(i)
@@ -200,7 +200,7 @@
 
       j = j + 1
       label(j) = 'Erythema, humans (Anders et al., 1995)'
-      OPEN(UNIT=kin,FILE='DATAS1/ery.anders',STATUS='old')
+      OPEN(UNIT=kin,FILE='tuv/DATAS1/ery.anders',STATUS='old')
       do i = 1, 5
          read(kin,*)
       enddo
@@ -232,7 +232,7 @@
 
       j = j + 1
       label(j) = 'Occupational TLV (ACGIH, 1992)'
-      OPEN(UNIT=kin,FILE='DATAS1/acgih.1992',STATUS='old')
+      OPEN(UNIT=kin,FILE='tuv/DATAS1/acgih.1992',STATUS='old')
       n = 56
       DO i = 1, n
          READ(kin,*) x1(i), y1(i)
@@ -285,7 +285,7 @@
 
       j = j + 1
       label(j) = 'Phytoplankton, phaeo (Cullen et al., 1992)'
-      OPEN(UNIT=kin,FILE='DATAS1/phaeo.bio',STATUS='old')
+      OPEN(UNIT=kin,FILE='tuv/DATAS1/phaeo.bio',STATUS='old')
       n = 106
       DO i = 1, n
          READ(kin,*) idum, dum1, dum2, y1(i)
@@ -311,7 +311,7 @@
 
       j = j + 1
       label(j) = 'Phytoplankton, proro (Cullen et al., 1992)'
-      OPEN(UNIT=kin,FILE='DATAS1/proro.bio',STATUS='old')
+      OPEN(UNIT=kin,FILE='tuv/DATAS1/proro.bio',STATUS='old')
       n = 100
       DO i = 1, n
          READ(kin,*) idum, dum1, dum2, y1(i)
@@ -340,7 +340,7 @@
 
       j = j + 1
       label(j) = 'Cataract, pig (Oriowo et al., 2001)'
-      OPEN(UNIT=kin,FILE='DATAS1/cataract_oriowo',STATUS='old')
+      OPEN(UNIT=kin,FILE='tuv/DATAS1/cataract_oriowo',STATUS='old')
       DO i = 1, 7
          READ(kin,*)
       ENDDO
@@ -441,7 +441,7 @@ c      enddo
       j = j + 1
       label(j) = 'Previtamin-D3 (CIE 2006)'
 
-      OPEN(UNIT=kin,FILE='DATAS1/vitamin_D.txt',STATUS='old')
+      OPEN(UNIT=kin,FILE='tuv/DATAS1/vitamin_D.txt',STATUS='old')
       DO i = 1, 7
          READ(kin,*)
       ENDDO
@@ -477,7 +477,7 @@ c      enddo
       j = j + 1
       label(j) = 'NMSC (CIE 2006)'
 
-      OPEN(UNIT=kin,FILE='DATAS1/nmsc_cie.txt',STATUS='old')
+      OPEN(UNIT=kin,FILE='tuv/DATAS1/nmsc_cie.txt',STATUS='old')
       DO i = 1, 7
          READ(kin,*)
       ENDDO

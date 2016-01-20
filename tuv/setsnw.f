@@ -260,11 +260,11 @@
 ************* absorption cross sections:
 * ice absorption cross sections from 
 
-      fil = 'DATA/ice'
-      OPEN(UNIT=kin,FILE='DATAJ1/ABS/ICE_Perov.acff',STATUS='old')
+      fil = 'tuv/DATA/ice'
+      OPEN(UNIT=kin,FILE='tuv/DATAJ1/ABS/ICE_Perov.acff',STATUS='old')
       m = 17       ! header lines
       n = 79       ! data lines
-      !OPEN(UNIT=kin,FILE='DATAJ1/ABS/ICE_min.acff',STATUS='old')
+      !OPEN(UNIT=kin,FILE='tuv/DATAJ1/ABS/ICE_min.acff',STATUS='old')
       !m = 13       ! header lines
       !n = 52       ! data lines
 

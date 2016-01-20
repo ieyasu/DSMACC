@@ -218,7 +218,7 @@ c      OPEN(UNIT=kout,FILE='tuvlog',STATUS='UNKNOWN')
 
 c      intrct = .TRUE.
       intrct = .FALSE.
-      IF ( .NOT. intrct) inpfil = 'usrinp'
+      IF ( .NOT. intrct) inpfil = 'tuv/INPUTS/usrinp'
 
       CALL rdinp(intrct, 
      $     inpfil, outfil, nstr,   lat,    lon,    tmzone,
