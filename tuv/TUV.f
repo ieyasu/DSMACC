@@ -149,7 +149,7 @@
 * input/output control
 
       LOGICAL intrct
-      CHARACTER*6 inpfil, outfil
+      CHARACTER*32 inpfil, outfil
 
       INTEGER iout
 

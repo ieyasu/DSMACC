@@ -35,7 +35,7 @@
 * Input/output variables
 
       LOGICAL intrct
-      CHARACTER*6 inpfil, outfil
+      CHARACTER*32 inpfil, outfil
       INTEGER nstr
       REAL lat, lon, tmzone
       INTEGER iyear, imonth, iday
