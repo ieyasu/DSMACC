@@ -303,23 +303,16 @@ sub find_includes {
 	if ($included) {
 	    # See if we've already searched this file
 	    if ( $inc_files{$included} ) {
-		$filepath = $inc_files{$included}{'filepath'};
+            $filepath = $inc_files{$included}{'filepath'};
 	    } else {
-                $filepath = main::findfile($included);
-		$ref = new Source_File($included, $filepath);
-                $inc_files{$included} = $ref;
+            $filepath = main::findfile($included);
+            $ref = new Source_File($included, $filepath);
+            $inc_files{$included} = $ref;
 # Search included file for includes
-		$ref->find_includes();
+            $ref->find_includes();
 	    }
-            if ( $filepath ) {
-		$self->{'includes'}{$included} = 1;
-	    } else {
-                if ($after !~ /bogus/i) {
-#  mz_pj_20041124+
-#		    warn "Can't find file: $included\n";
-		    warn "... extern include file: $included\n";
-#  mz_pj_20041124-
-		}
+        if ( $filepath ) {
+            $self->{'includes'}{$included} = 1;
 	    }
 	}
     }
