@@ -14,7 +14,7 @@ bin/dsmacc: src/dsmacc_Main.f90 tuv src/depend.mk Makefile.defs
 	cd src && $(MAKE)
 
 src/dsmacc_Main.f90: $(DSMACC_SRC)
-	cd src && ../kpp/bin/kpp ../dsmacc.kpp dsmacc
+	cd stage && ./reprocess.sh
 
 kpp: kpp/bin/kpp
 kpp/bin/kpp: Makefile.defs

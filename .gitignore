@@ -34,3 +34,4 @@ config.log
 config.status
 Makefile.defs
 autom*.cache
+stage/*.f90
