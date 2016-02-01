@@ -275,24 +275,24 @@ SUBROUTINE UPDATE_TUV()
             &        OLD_TEMP .NE. TEMP .OR. &
             &        OLD_O3COL .NE. O3COL .OR. &
             &        OLD_JDAY .NE. IJDAY) THEN
-            WRITE (6,*) 'hvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhv'
-            WRITE (6,*) 'Using TUV to calculate photolysis rates as a function of O3 column, SZA, ALT, and TEMP'
+            WRITE (OUT_UNIT,*) 'hvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhv'
+            WRITE (OUT_UNIT,*) 'Using TUV to calculate photolysis rates as a function of O3 column, SZA, ALT, and TEMP'
             alta=max(0., (1-(press/1013.25)**0.190263)*288.15/0.00198122*0.304800/1000.)
 
             IF (o3col .EQ. 0) THEN
                 o3col=260.
-                write (6,*) 'Ozone column not specified using 260 Dobsons'
+                write (OUT_UNIT,*) 'Ozone column not specified using 260 Dobsons'
             ELSE
-                WRITE (6,*) 'Ozone column =', o3col
+                WRITE (OUT_UNIT,*) 'Ozone column =', o3col
             END IF
 
             !    Calculate the photolysis rates for the run
             tdate = GREGDATETIME(JDAY)
-            WRITE(6,*) INT(tdate(1)), INT(tdate(2)), INT(tdate(3))
+            WRITE(OUT_UNIT,*) INT(tdate(1)), INT(tdate(2)), INT(tdate(3))
             CALL set_up_photol(INT(tdate(1)), INT(tdate(2)), INT(tdate(3)),&
                 O3col, alta, lat, lon, temp, M, bs,cs,ds,szas,svj_tj)
-            WRITE (6,*) 'Photolysis rates calculated'
-            WRITE (6,*) 'hvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhv'
+            WRITE (OUT_UNIT,*) 'Photolysis rates calculated'
+            WRITE (OUT_UNIT,*) 'hvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhv'
             OLD_M = M
             OLD_LAT = LAT
             OLD_LON = LON

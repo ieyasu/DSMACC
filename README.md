@@ -61,7 +61,7 @@ assume basic knowledge of Linux Bash or C-Shell.
 ### <a id="Install%20Prerequisites"/>Install prerequisites
 
 DSMACC has relatively few requirements and all can be obtained free of
-charge. DSMACC itself requires a basic linux development environment.
+charge. DSMACC itself requires a basic Linux development environment.
 DSMACC also uses KPP (distributed with DSMACC), which requires a parser
 and a lexer.
 
@@ -80,12 +80,12 @@ Configuration](KPP Configuration)) These instructions will build the
 DSMACC model, and run it with example inputs. It will then compare your
 results with a set of archived results.
 
-1.  [Click here to download code](https://github.com/barronh/DSMACC/archive/master.zip)
-2.  Open a terminal and navigate to folder where the code was downloaded
-3.  type `unzip DSMACC-master.zip`
-4.  type `cd DSMACC-master`
-5.  type `./configure`
-6.  type `make check`
+1. Open a terminal and go to a directory where you want to put DSMACC.
+2. Get a copy of the source code with `git clone https://github.com/ieyasu/DSMACC.git`
+3. `cd DSMACC`
+4. `./configure` (`./configure --help` to see configuration options)
+5. `make`
+6. (optional) `make check`
 
 This may take some time, but will give you a list of pass/fails for a
 diurnal constrained steady state run.
@@ -163,10 +163,10 @@ representing different aspects of the initial conditions (time,
 pressure, latitude, concentrations) and the rows representing different
 independent simulations of the model.
 
-#### 1^st Line
+#### Line 2
 
 If the first line of the file contains a ***positive integer*** this
-tells the model to run forwards into for that number of seconds. The
+tells the model to run forward that number of seconds. The
 output of each independent simulation is written to the files
 Spec\_\*.dat and Rate\_\*.,dat where the \* represents an integer value
 representing the simulation number.
@@ -181,7 +181,7 @@ diurnal steady state has been reached with output for the final 24 hours
 for each independent simulations being written to the files Spec\_\*.dat
 and Rate\_\*.dat.
 
-#### 2^nd Line
+#### Line 2
 
 The second row in the file should contain the parameters to be input
 into the model. Each parameter name is 15 characters long, separated by
@@ -206,7 +206,7 @@ If a parameter is set which is not in the above list or is a species
 name as defined by the chemistry of the model the will stop (unless it
 starts with an X, XOH will not cause the model to crash).
 
-#### 3^rd Line
+#### Line 3
 
 The third line gives information about which values should be
 constrained and which ones allowed to run freely in the model
