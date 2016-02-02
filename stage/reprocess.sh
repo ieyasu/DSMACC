@@ -34,4 +34,6 @@ done
 echo
 
 # no need to keep remaining files
-rm *.f90
+rm -f *.f90
+
+exit 0
