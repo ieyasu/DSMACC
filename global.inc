@@ -6,11 +6,12 @@
     LOGICAL :: SPEC_CH4, SPEC_H2
     INTEGER :: IntTime
     LOGICAL :: CONSTRAIN_NOX, CONSTRAIN_RUN
-    LOGICAL :: LAST_POINT = .false., OUTPUT_LAST_24
+    LOGICAL :: LAST_POINT, OUTPUT_LAST_24
     CHARACTER(LEN=15) :: spec_name(10000) ! as listed in Init_cons.dat
     INTEGER :: const_method(10000), LINECOUNT
     ! C - Concentration of all species
     REAL(kind=dp) :: COLD(NSPEC)
+
     INTEGER, PARAMETER :: OUT_UNIT = 6, ERROR_UNIT = 0, &
         SPEC_UNIT = 8, RATE_UNIT = 7, CONS_UNIT = 21
 

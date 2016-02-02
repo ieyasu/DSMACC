@@ -9,9 +9,9 @@ PROGRAM driver
 
     IMPLICIT NONE
 
-    REAL(dp) :: ENDSTATE(NVAR), total, RATIO, TNOX, TNOX_OLD
-    REAL(dp) :: STARTSTATE(NVAR), TIMESCALE
-    REAL(dp) :: RH, CALCJO1D, CALCJNO2
+    REAL(dp) :: TNOX, TNOX_OLD
+    REAL(dp) :: STARTSTATE(NVAR)
+    REAL(dp) :: CALCJO1D, CALCJNO2
     REAL(dp) :: RSTATE(20)
     REAL(dp) :: DIURNAL_OLD(NVAR,3000), DIURNAL_NEW(NVAR,3000)
     REAL(dp) :: DIURNAL_RATES(NREACT, 3000)
@@ -24,7 +24,7 @@ PROGRAM driver
     INTEGER  :: i, Daycounter, CONSTNOXSPEC, JK, counter
 
     REAL(dp) :: NOXRATIO, NEW_TIME
-    REAL(dp) :: Fracdiff, SpeedRatio, oldfracdiff, FRACCOUNT
+    REAL(dp) :: Fracdiff, oldfracdiff, FRACCOUNT
 
     ! DT - timestep var defined by KPP in the dsmacc_Global module.
     ! It is the timestep for output, rate constant. and photolysis rates.

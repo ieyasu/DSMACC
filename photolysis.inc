@@ -370,8 +370,7 @@ REAL(kind=dp) FUNCTION J(IJ)
 END FUNCTION J
 
 REAL(kind=dp) FUNCTION TUV_J(IJ, THETA, JFACT)
-    USE dsmacc_Global,  ONLY: BS, CS, DS, SZAS, SVJ_TJ, &
-        &               PRESS, TEMP, kj
+    USE dsmacc_Global,  ONLY: BS, CS, DS, SZAS, SVJ_TJ, kj
     INTEGER, PARAMETER :: NSZAS = 19
     REAL(kind=dp) B(NSZAS), C(NSZAS), D(NSZAS), TMP_SVJ_TJ(NSZAS), &
         &               TMP_SZAS(NSZAS), THETA, JFACT
@@ -381,7 +380,6 @@ REAL(kind=dp) FUNCTION TUV_J(IJ, THETA, JFACT)
 
     REAL*8 SEVAL ! function from TUV
     EXTERNAL SEVAL ! function from TUV
-    INTEGER THIS_SZA ! temporary variables
 
     call update_tuv()
     IF (THETA .LT. 90.D0) THEN
