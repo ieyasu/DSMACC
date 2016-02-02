@@ -5,7 +5,6 @@ PROGRAM driver
     USE dsmacc_integrator,  ONLY: integrate
     USE dsmacc_monitor,     ONLY: spc_names, MONITOR
     USE dsmacc_Util
-    !USE constants
 
     IMPLICIT NONE
 
