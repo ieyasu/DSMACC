@@ -3,11 +3,16 @@
     REAL(dp) :: JDAY, JREPEAT, ALBEDO, SAREA, RP1
     INTEGER :: INIT_TIME, NOX(NVAR)
     REAL(dp):: CONSTRAIN(NVAR)
-    LOGICAL :: SPEC_CH4, SPEC_H2
+    ! indexes to these species, non-zero when not in Init_cons.dat
+    INTEGER :: NEED_CH4_IDX, NEED_H2_IDX ! XXX just util.inc?
     INTEGER :: IntTime
-    LOGICAL :: CONSTRAIN_NOX, CONSTRAIN_RUN
-    LOGICAL :: LAST_POINT, OUTPUT_LAST_24
-    CHARACTER(LEN=15) :: spec_name(10000) ! as listed in Init_cons.dat
+    LOGICAL :: CONSTRAIN_RUN, CONSTRAIN_NOX
+    INTEGER :: CONST_NOX_SPC_IDX
+    LOGICAL :: OUTPUT_LAST_24
+    CHARACTER(LEN=15) :: file_spec_names(10000) ! as listed in Init_cons.dat
+    ! at index of of species in file, stores index into spc_names
+    INTEGER, ALLOCATABLE :: file_spec_idx(:)
+    INTEGER :: n_file_specs ! number of species given in Init_cons.dat
     INTEGER :: const_method(10000), LINECOUNT
     ! C - Concentration of all species
     REAL(kind=dp) :: COLD(NSPEC)

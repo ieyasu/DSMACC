@@ -3,31 +3,31 @@ PROGRAM driver
     USE dsmacc_Parameters  !ONLY: IND_*
     USE dsmacc_Rates,       ONLY: Update_SUN, Update_RCONST, J
     USE dsmacc_integrator,  ONLY: integrate
-    USE dsmacc_monitor,     ONLY: spc_names, MONITOR
+    USE dsmacc_monitor,     ONLY: SPC_NAMES, MONITOR
     USE dsmacc_Util
 
     IMPLICIT NONE
 
     REAL(dp) :: TNOX, TNOX_OLD
-    REAL(dp) :: STARTSTATE(NVAR)
     REAL(dp) :: CALCJO1D, CALCJNO2
     REAL(dp) :: RSTATE(20)
-    REAL(dp) :: DIURNAL_OLD(NVAR,3000), DIURNAL_NEW(NVAR,3000)
-    REAL(dp) :: DIURNAL_RATES(NREACT, 3000)
+
     REAL(dp) :: BASE_JDAY
     INTEGER  :: ERROR, IJ
-    LOGICAL :: SCREWED
     ! Photolysis calculation variables
     REAL(dp) :: Alta
 
     INTEGER  :: i, Daycounter, CONSTNOXSPEC, JK, counter
 
     REAL(dp) :: NOXRATIO, NEW_TIME
-    REAL(dp) :: Fracdiff, oldfracdiff, FRACCOUNT
+    REAL(dp), DIMENSION(NVAR,3000) :: DIURNAL_OLD, DIURNAL_NEW
+    REAL(dp), DIMENSION(NREACT,3000) :: DIURNAL_RATES
+    REAL(dp) :: Fracdiff
+    INTEGER  :: FRACCOUNT
 
     ! DT - timestep var defined by KPP in the dsmacc_Global module.
-    ! It is the timestep for output, rate constant. and photolysis rates.
-    DT = 1200.
+    ! It is the timestep for output, rate constant and photolysis rates.
+    DT = 1200. ! 20 minutes
 
     STEPMIN = 0.0_dp
     STEPMAX = 0.0_dp
@@ -37,23 +37,16 @@ PROGRAM driver
     ! Get run parameters from Init_cons.dat file
     CALL OpenInitCons()
 
-    !  If we are running a constrained run we want one file with the final points calculated
-    IF (CONSTRAIN_RUN .AND. OUTPUT_LAST_24) THEN 
-        CALL OpenDataFiles(1)
-    END IF
-
-
 !$OMP PARALLEL
 !$OMP DO
+! XXX this loop isn't going to be parallelizable without using separate
+! XXX unit numbers for each Spec_*.dat and Rate_*.dat files
 
     !This is the loop of different points in the Init_cons.dat file
     DO counter = 1, LINECOUNT-3
 !$OMP CRITICAL
         CALL NextInitCons(counter)
 !$OMP END CRITICAL
-
-        ! Set up the output files file
-        ! XXX above comment isn't next to code that does what it sounds like
 
         M  = CFACTOR
         O2 = 0.21 * CFACTOR
@@ -62,14 +55,12 @@ PROGRAM driver
         WRITE(OUT_UNIT,*) 'Starting Jday:', jday
 
         ! tstart is the starting time, variations due to day of year are dealt with somewhere else 
-        tstart = (MOD(jday,1.))*24.*60.*60.
+        tstart = MOD(jday,1.)*24.*60.*60.
 
         ! convert tstart to local time
-        tstart = tstart+LON/360.*24*60*60.
-        BASE_JDAY = JDAY - tstart / 24. / 60. / 60.
-
-        ! tend is the end time. IntTime is determined from the Init_cons.dat file
-        tend = tstart + IntTime
+        tstart = tstart + LON/360.*24*60*60.
+        BASE_JDAY = JDAY - tstart/24./60./60.
+        tend = tstart + IntTime ! IntTime is from Init_cons.dat
 
         WRITE(OUT_UNIT,*) 'Starting time:', tstart
         WRITE(OUT_UNIT,*) 'Ending time:',  tend
@@ -77,7 +68,8 @@ PROGRAM driver
 
         ! Set up the photolysis rates
         ! First calculate pressure altitude from altitude
-        WRITE(OUT_UNIT,*) 'hvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhv'
+        WRITE(OUT_UNIT,*) ''
+        WRITE(OUT_UNIT,*) '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
         WRITE(OUT_UNIT,*) 'Using TUV to calculate photolysis rates as a function of SZA'
         alta=(1-(press/1013.25)**0.190263)*288.15/0.00198122*0.304800/1000.
         WRITE(OUT_UNIT,*) 'Aerosol surface area', SAREA
@@ -113,24 +105,20 @@ PROGRAM driver
         !END IF
         !$OMP END CRITICAL
         !WRITE(OUT_UNIT,*) 'Photolysis rates calculated'
-        !WRITE(OUT_UNIT,*) 'hvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhvhv'
+        !WRITE(OUT_UNIT,*) '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
         time = tstart
-
-
-        OLDFRACDIFF=0.
 
         IF (CONSTRAIN_NOX) THEN ! calculate the total NOx in the model 
             TNOX_OLD=0.
             DO JK=1,NVAR
-                TNOX_OLD=TNOX_OLD+C(JK)*NOX(JK)
+                TNOX_OLD = TNOX_OLD + C(JK) * NOX(JK)
             END DO
         END IF
 
         ! Initialize model state
-        DO I=1,NVAR
-            STARTSTATE(I)=C(I)
-            DO IJ=1,3000
-                DIURNAL_OLD(I,IJ)=0.
+        DO I = 1, NVAR
+            DO IJ = 1, 3000
+                DIURNAL_OLD(I,IJ) = 0.
             END DO
         END DO
 
@@ -150,39 +138,37 @@ PROGRAM driver
         IF (JO1D /= 0. .AND. CALCJO1D > 0.) THEN
             JFACTO1D = JO1D / J(1)
         END IF
-
         IF (JNO2 /= 0. .AND. CALCJNO2 > 0.) THEN
             JFACTNO2 = JNO2 / J(4)
         END IF
-
         IF (JNO2 == 0. .AND. JO1D /= 0.) THEN 
             JFACTNO2 = JFACTO1D
         END IF
-
         IF (JO1D == 0. .AND. JNO2 /= 0.) THEN 
             JFACTO1D = JFACTNO2
         END IF
 
         WRITE(OUT_UNIT,*) 'Correction JO1D and JNO2 by', JFACTO1D, JFACTNO2
 
-        ! If we are running a non-constrained run then we want one file per input in the Init_cons.dat file
-        IF ((.NOT. CONSTRAIN_RUN) .OR. (.NOT. OUTPUT_LAST_24)) THEN 
-            CALL OpenDataFiles(counter)
-        END IF
+        ! Open next Spec_*.dat and Rate_*.dat files
+        CALL OpenDataFiles(counter)
 
-
-        ! If we are running a free running model output the initial condition so T=0 of the output file gives the initial condition
+        ! If we are running a free running model output the initial condition
+        ! so T=0 of the output file gives the initial condition
         IF (.NOT. CONSTRAIN_RUN) THEN 
             CALL WriteData()
         END IF
 
-        ! Set up a counter to count the number time that the model has been run for
-        Daycounter=0
+
+        Daycounter = 0
+
         WRITE(ERROR_UNIT,*)'Concentrations in ppb'
+        ! XXX nmonitor is provided by KPP; how is it determined?
         IF (NMONITOR > 0) THEN
             WRITE(ERROR_UNIT,'(100000(a25,"!"))') 'TIME', (SPC_NAMES(MONITOR(i)),i=1,NMONITOR)
             WRITE(ERROR_UNIT,'(100000(E25.16E3,"!"))') time, (C(MONITOR(i))/CFACTOR * 1e9,i=1,NMONITOR)
         END IF
+
         ! This is the main loop for integrations
         time_loop: DO WHILE (time < TEND)
 
@@ -194,9 +180,9 @@ PROGRAM driver
                 ICNTRL_U = (/ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 /),&
                 IERR_U=ERROR)
 
-            IF (ERROR /= 1) THEN 
-                WRITE(OUT_UNIT,*) 'Integration error.'
-                WRITE(OUT_UNIT,*) 'Skipping point'
+            IF (ERROR /= 1) THEN
+                WRITE(OUT_UNIT,*) 'Integration error at point', counter, &
+                    'time', time
                 IF (NMONITOR > 0) THEN
                     WRITE(OUT_UNIT,'(100000(E25.16E3,"!"))') time,&
                         (C(MONITOR(i))/CFACTOR * 1e9,i=1,NMONITOR)
@@ -204,48 +190,51 @@ PROGRAM driver
                         ((C(MONITOR(i))-COLD(MONITOR(i)))/COLD(MONITOR(i))/CFACTOR&
                         * 1e9,i=1,NMONITOR)
                 END IF
-                DO I=1,NVAR
-                    C(I)=0.
-                END DO
+
+                ! XXX why did orig. code zero out C here?!
+                !DO I=1,NVAR
+                !    C(I)=0.
+                !END DO
                 GOTO 1000
             END IF
+
             ! Traps for NaN
-            SCREWED=.FALSE.
             DO I=1,NVAR
-                IF (ISNAN(C(I))) SCREWED=.TRUE.
+                IF (ISNAN(C(I))) THEN
+                    WRITE(ERROR_UNIT, *) 'NaN found in - XXX -, exiting'
+                    ! XXX why did orig. code zero out C here?!
+                    !DO i=1,NVAR
+                    !    C(I)=0.
+                    !END DO
+                    GOTO 1000
+                END IF
             END DO
 
-            IF (SCREWED) THEN 
-                SCREWED=.FALSE.
-                DO i=1,NVAR
-                    C(I)=0.
-                END DO
-                GOTO 1000
-            END IF
             ! Update the time to reflect the integration has taken place and 
-            time = RSTATE(1)
-            JDAY = BASE_JDAY + time / 24. /60./60.
-            Daycounter=Daycounter+1
+            time = RSTATE(1) ! XXX why is rstate(1) different than tout?
+            JDAY = BASE_JDAY + time / 24. / 60. / 60.
+            Daycounter = Daycounter + 1
 
-            ! If we are constraining NOx then:
-            IF (CONSTRAIN_NOX) THEN 
-                ! Calcualte the total NOx in the box
-                TNOX=0
+            IF (CONSTRAIN_NOX) THEN
+                ! Calculate total NOx in the box
+                TNOX = 0
                 DO I=1,NVAR
                     IF (NOX(I) /= 0) THEN 
-                        TNOX=TNOX+C(I)*NOX(I)
+                        TNOX = TNOX + C(I) * NOX(I)
                     END IF
                 END DO
 
-                ! Update all NOx variables so that the total NOx in the box is the same as it was
+                ! Update all NOx variables so that the total NOx in the box
+                ! is the same as it was
+                NOXRATIO = TNOX_OLD / TNOX
                 DO I=1,NVAR
-                    IF (NOX(I) /= 0) THEN 
-                        C(I)=C(I)*TNOX_OLD/TNOX
+                    IF (NOX(I) /= 0) THEN
+                        C(I)=C(I)*NOXRATIO
                     END IF
                 END DO
             END IF
 
-            ! If constrain species concentALrations if necessary
+            ! If constrain species concentrations if necessary
             DO I=1,NVAR
                 IF (CONSTRAIN(I) > 0) THEN             
                     C(I)=CONSTRAIN(I)
@@ -265,95 +254,89 @@ PROGRAM driver
             ! If we are doing a constrained run we need to store the diurnal profile of all the species
             IF (CONSTRAIN_RUN) THEN
                 DO I=1,NVAR
-                    DIURNAL_NEW(I,DAYCOUNTER)=C(I)
+                    DIURNAL_NEW(I,DAYCOUNTER) = C(I)
                 END DO
 
                 DO I=1,NREACT
-                    DIURNAL_RATES(I,DAYCOUNTER)=RCONST(I)
+                    DIURNAL_RATES(I,DAYCOUNTER) = RCONST(I)
                 END DO
 
                 ! Are we at the end of a day?
                 ! If so we need to 
                 !   1) fiddle with the NOX to ensure it has the right concentrations see if we have reached a steady state
-                IF (DAYCOUNTER*DT .GE. 24.*60.*60.) THEN
+                IF (DAYCOUNTER*DT >= 24.*60.*60.) THEN
                     ! Sort out the NOx. Need to increase the NOx concentration so that the constrained species is right
-                    ! What is  the constrained NOx species? Put result into CONSTNOXSPEC
-                    DO I=1,NVAR
-                        IF (NOX(I) /= 0) THEN 
-                            IF (CONSTRAIN(I) .LT. 0) THEN 
-                                CONSTNOXSPEC=I
-                            END IF
-                        END IF
-                    END DO
 
                     ! If we are constraining NOx then:
-                    IF (CONSTRAIN_NOX) THEN 
+                    IF (CONSTRAIN_NOX) THEN
                         ! Calculate the ratio between the value we the constrained NOx species and what we have
                         ! Remember the constrained NOx species is given by the negative constrained value
-                        NOXRATIO=-CONSTRAIN(CONSTNOXSPEC)/C(CONSTNOXSPEC)
+                        NOXRATIO = -CONSTRAIN(CONST_NOX_SPC_IDX) / C(CONST_NOX_SPC_IDX)
 
                         ! Multiply all the NOx species by the ratio so 
                         DO I=1,NVAR
                             IF (NOX(I) /= 0) THEN 
-                                C(I)=C(I)*NOXRATIO
+                                C(I) = C(I) * NOXRATIO
                             END IF
                         END DO
                     END IF
                     ! Update the total amount of NOx in box
-                    TNOX_OLD=TNOX_OLD*NOXRATIO
+                    TNOX_OLD = TNOX_OLD * NOXRATIO
 
-                    ! Lets see how much the diurnal ratios have changed since the last itteration
+                    ! Lets see how much the diurnal ratios have changed since the last iteration
 
                     ! Frac diff is our metric for how much it has changed 
                     FRACDIFF=0.
-                    FRACCOUNT=0.
+                    FRACCOUNT=0
                     ! Add up for all species and for each time point in the day
                     DO I=1,NVAR
                         DO JK=1,DAYCOUNTER
-                            !If there is a concentration calculated
+                            ! If there is a concentration calculated
                             IF (DIURNAL_NEW(I,JK) > 1.e2 .AND. &
                                 TRIM(SPC_NAMES(I)) /= 'DUMMY') THEN 
-                                !Calculate the absolute value of the fractional difference and add it on
+                                ! Calculate the absolute value of the fractional difference and add it on
                                 ! Increment the counter to calculate the average
-                                FRACDIFF=FRACDIFF+&
-                                    ABS(DIURNAL_OLD(I,JK)-DIURNAL_NEW(I,JK))/&
+                                FRACDIFF = FRACDIFF + &
+                                    ABS(DIURNAL_OLD(I,JK) - DIURNAL_NEW(I,JK))/&
                                     DIURNAL_NEW(I,JK)
-                                FRACCOUNT=FRACCOUNT+1
+                                FRACCOUNT = FRACCOUNT + 1
                             END IF
                         END DO
                     END DO
-
-                    ! Calculate the average fractional difference
-                    FRACDIFF=FRACDIFF/FRACCOUNT
+                    FRACDIFF = FRACDIFF / FRACCOUNT
 
                     ! Output the diagnostic
-                    WRITE(OUT_UNIT,*)&
+                    WRITE(OUT_UNIT,*) &
                         'Fraction difference in the diurnal profile:', FRACDIFF
+
+                    ! check if model has converged to steady state
+                    ! XXX won't exit unless at end of day
+                    IF (FRACDIFF <= 1e-3) EXIT
 
                     ! Store the new diurnal profile as the old one so we can compare with the next day
                     DO I=1,NVAR
                         DO JK=1,DAYCOUNTER
-                            DIURNAL_OLD(I,JK)=DIURNAL_NEW(I,JK)
+                            DIURNAL_OLD(I,JK) = DIURNAL_NEW(I,JK)
                         END DO
                     END DO
 
-                    ! reset the day counter to 0
-
-                    ! if the system has converged then end the simulation for this point
-                    IF (FRACDIFF .LE. 1e-3) THEN
-                        GOTO 1000
-                    END IF
-                    DAYCOUNTER=0
-                    OLDFRACDIFF=FRACDIFF
-                END IF
-            END IF
+                    ! XXX this appears to be some kind of timestep counter,
+                    ! XXX reset at end of day
+                    DAYCOUNTER = 0
+                END IF ! end of day
+            END IF ! CONSTRAIN_RUN
         END DO time_loop
 
 
 1000    IF (CONSTRAIN_RUN .AND. (.NOT. OUTPUT_LAST_24)) THEN
-            CALL WriteData()
+            CALL WriteData() ! Output final timestep
         END IF
 
+        ! XXX can't figure this ahead of time since we have to wait until
+        ! XXX model has reached a steady state
+
+        ! XXX *do* want to reuse util.inc code, especially because
+        ! XXX we need to not duplicate the formatting
         IF (OUTPUT_LAST_24) THEN
             DO I = 1, DAYCOUNTER
                 NEW_TIME = I * DT
@@ -365,14 +348,10 @@ PROGRAM driver
 999         FORMAT(E24.16,100000(1X,E24.16))
         END IF
 
-        IF (.NOT. CONSTRAIN_RUN) THEN
-            ! close output file
-            CALL CloseDataFiles()
-        END IF
-        WRITE(OUT_UNIT,*) 'Output point', counter
-    END DO
+        CALL CloseDataFiles(counter)
+    END DO ! each independent 'point' to run at
 !$OMP END DO NOWAIT
 !$OMP END PARALLEL 
 
-    IF (CONSTRAIN_RUN) CALL CloseDataFiles()
+    CALL CloseInitCons()
 END PROGRAM driver
