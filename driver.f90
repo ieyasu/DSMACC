@@ -96,7 +96,7 @@ PROGRAM driver
         !WRITE(OUT_UNIT,*) 'SZA =',ZENANG(int(jday),Tstart/(60.*60.),lat)*180./(4*ATAN(1.))
 
         ! XXX this stuff belongs over in util.inc
-        IF (o3col == 0) THEN 
+        IF (o3col == 0) THEN
             o3col = 260.
             WRITE(OUT_UNIT,*) 'Ozone column not specified; using 260 Dobsons'
         ELSE
@@ -173,7 +173,7 @@ PROGRAM driver
         ! If we are running a free running model output the initial condition
         ! so T=0 of the output file gives the initial condition
         IF (.NOT. CONSTRAIN_RUN) THEN 
-            CALL WriteCurrentData(TIME)
+            CALL WriteCurrentData(time)
         END IF
 
 251 FORMAT (100000(a25,"!"))
@@ -196,8 +196,8 @@ PROGRAM driver
             END IF
 
             ! Integrate model forward 1 timestep
-            CALL INTEGRATE( TIN = time, TOUT = time+DT, RSTATUS_U = RSTATE, &
-                ICNTRL_U = (/ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 /),&
+            CALL INTEGRATE(TIN=time, TOUT=time+DT, RSTATUS_U=RSTATE, &
+                ICNTRL_U = (/ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 /), &
                 IERR_U=ERROR)
 
             IF (ERROR /= 1) THEN
@@ -222,8 +222,8 @@ PROGRAM driver
                 END IF
             END DO
 
-            ! Update the time to reflect the integration has taken place and 
-            time = RSTATE(1) ! XXX why is rstate(1) different than tout?
+            ! Update the time to reflect the integration that has taken place
+            time = RSTATE(1)
             JDAY = BASE_JDAY + time / 24. / 60. / 60.
 
             IF (CONSTRAIN_NOX) THEN
@@ -261,7 +261,7 @@ PROGRAM driver
                 CALL CONSTRAINED_STEP
                 IF (reached_steady_state) EXIT
             ELSE
-                CALL WriteCurrentData(TIME)
+                CALL WriteCurrentData(time)
             END IF
         END DO time_loop
 
