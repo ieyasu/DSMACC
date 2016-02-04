@@ -6,7 +6,7 @@ Overview
 
 The Dynamically Simple Model for Atmospheric Chemical Complexity
 (DSMACC) is a tropospheric chemistry box model designed to help
-understand the composition of the troposphere in a flexiable and
+understand the composition of the troposphere in a flexible and
 friendly manner. It is written to address a range of problems ranging
 from calculating the expected concentrations of atmospheric radicals to
 comparing chemistry schemes.
@@ -32,6 +32,10 @@ chemistry integration
 code](http://people.cs.vt.edu/%7Easandu/Software/Kpp/) written at
 Virginia Tech by Adrian Sandu's group.
 
+Matthew Bishop [forked](//github.com/ieyasu/DSMACC) Barron Henderson's
+repository and made some major cleanup work on the code to reduce
+repeated computation and organize the code some.
+
 If you use the code and wish to cite the model please use:
 
 Emmerson, KM; Evans, MJ (2009) Comparison of tropospheric gas-phase
@@ -41,6 +45,8 @@ chemistry schemes for use within global models, *ATMOS CHEM PHYS*,
 
 Instructions
 ============
+
+[Supplemental instructions](http://wiki.seas.harvard.edu/geos-chem/index.php/DSMACC_chemical_box_model#Generate_kpp_files_based_on_your_mechanism) can be found on the GEOS-Chem Wiki.
 
 Overview
 --------
@@ -94,8 +100,8 @@ diurnal constrained steady state run.
 #### Standard KPP input
 
 Which chemistry scheme you are going to run in the model is described by
-the series of files at the beginning of the model.kpp file. For example
-if you have the line \`\#INCLUDE inorganic.kpp\` in your model.kpp file
+the series of files at the beginning of the dsmacc.kpp file. For example
+if you have the line \`\#INCLUDE inorganic.kpp\` in your dsmacc.kpp file
 the chemistry included in that file will be included in chemistry
 scheme. For details about how to write these files see the kpp user
 manual.
@@ -112,7 +118,7 @@ and contains the organic aspects of the chemistry scheme.
 #### To generate the organic.kpp file
 
 Go to
-[http://mcm.leeds.ac.uk/MCM/roots.http](http://mcm.leeds.ac.uk/MCM/roots.http)
+[http://mcm.leeds.ac.uk/MCMv3.3.1/extract.htt](http://mcm.leeds.ac.uk/MCM/roots.http))
 . Then select the base VOCs that you would like to simulate the
 chemistry of by selecting the check boxes associated with each species.
 Once all the VOC's have been selected click 'Added Selection to Marked
@@ -168,7 +174,7 @@ independent simulations of the model.
 If the first line of the file contains a ***positive integer*** this
 tells the model to run forward that number of seconds. The
 output of each independent simulation is written to the files
-Spec\_\*.dat and Rate\_\*.,dat where the \* represents an integer value
+Spec\_\*.dat and Rate\_\*.dat where the \* represents an integer value
 representing the simulation number.
 
 If the first line contains `-1` the model is run forwards until a
@@ -218,18 +224,18 @@ parameter and a ‘0’ indicating no constraint. Subsequent rows contain
 the input data to the model, with concentrations in mixing ratio.
 
 Where total NOx is to be constrained it is necessary to constrain either
-NO or NO~2~, but not both. While the parameter ‘NOx’ must be included in
+NO or NO<sub>2</sub>, but not both. While the parameter ‘NOx’ must be included in
 the Init\_cons.dat file for total NOx to be constrained, its values in
 the file can be set to zero.
 
 In order to constrain NOx the model will calculate a number every 24
-hours by which the NO (or NO~2~ if NO~2~ is constrained in preference to
+hours by which the NO (or NO<sub>2</sub> if NO<sub>2</sub> is constrained in preference to
 NO) must be multiplied so that its modelled value remains in agreement
 with its observed value input into the model. All NOx species will
 subsequently be multiplied by this value, and hence constrained by proxy
-to NO (or NO~2~).
+to NO (or NO<sub>2</sub>).
 
-If neither *J* (O(^1^D)) nor *J* (NO~2~) are included in the input file,
+If neither *J* (O(^1^D)) nor *J* (NO<sub>2</sub>) are included in the input file,
 clear-sky values will be calculated at the altitude in question
 (determined from the pressure input) using TUV cross-sections at solar
 zenith angles varying between 0 and 90 degrees in 5 degree steps. The
@@ -238,14 +244,19 @@ calculated from the observed latitude, longitude and time of day, and a
 spline fit to the calculated *J*-values as a function of SZA used to
 determine the appropriate *J*-value.
 
-If *J* (O(^1^D)) or *J* (NO~2~) are present in the input file the model
+If *J* (O(^1^D)) or *J* (NO<sub>2</sub>) are present in the input file the model
 will compare calculated *J*-values to their observed values and scale
 all calculated values accordingly.
 
 Unless otherwise stated in the input file the model assigns [CH~4~] =
-1770 ppm, [H~2~] = 550 ppm, and an ozone column of 260 Dobsons.
+1770 ppm, [H<sub>2</sub>] = 550 ppm, and an ozone column of 260 Dobsons.
 
-To run the model type model
+### <a id="OutputFiles"/> Output Files
+
+
+### Running the Model
+
+To run the model type `model`
 
 To log the diagnostic information produced by the model to a file type
 `dsmacc > model_output`
