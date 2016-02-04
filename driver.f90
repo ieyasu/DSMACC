@@ -18,16 +18,18 @@ PROGRAM driver
     REAL(dp) :: Alta
 
     INTEGER  :: i, Daycounter, CONSTNOXSPEC, JK, counter
+    INTEGER :: STEPS_PER_DAY
 
     REAL(dp) :: NOXRATIO, NEW_TIME
-    REAL(dp), DIMENSION(NVAR,3000) :: DIURNAL_OLD, DIURNAL_NEW
-    REAL(dp), DIMENSION(NREACT,3000) :: DIURNAL_RATES
+    REAL(dp), ALLOCATABLE, DIMENSION(:,:) :: DIURNAL_OLD, DIURNAL_NEW, &
+        DIURNAL_RATES
     REAL(dp) :: Fracdiff
     INTEGER  :: FRACCOUNT
 
     ! DT - timestep var defined by KPP in the dsmacc_Global module.
     ! It is the timestep for output, rate constant and photolysis rates.
     DT = 1200. ! 20 minutes
+    STEPS_PER_DAY = 1 + (24 * 60 * 60) / INT(DT)
 
     STEPMIN = 0.0_dp
     STEPMAX = 0.0_dp
@@ -36,6 +38,13 @@ PROGRAM driver
 
     ! Get run parameters from Init_cons.dat file
     CALL OpenInitCons()
+
+    IF (CONSTRAIN_RUN) THEN
+        ! allocate arrays for calculating daily difference for stop condition
+        ALLOCATE(diurnal_old(NVAR, STEPS_PER_DAY))
+        ALLOCATE(diurnal_new(NVAR, STEPS_PER_DAY))
+        ALLOCATE(diurnal_rates(NREACT, STEPS_PER_DAY))
+    END IF
 
 !$OMP PARALLEL
 !$OMP DO
@@ -116,11 +125,13 @@ PROGRAM driver
         END IF
 
         ! Initialize model state
-        DO I = 1, NVAR
-            DO IJ = 1, 3000
-                DIURNAL_OLD(I,IJ) = 0.
+        IF (CONSTRAIN_RUN) THEN
+            DO I = 1, NVAR
+                DO IJ = 1, STEPS_PER_DAY
+                    DIURNAL_OLD(I,IJ) = 0.
+                END DO
             END DO
-        END DO
+        END IF
 
         ! Calculate clear sky photolysis rates
         JFACTNO2=1.
@@ -354,4 +365,10 @@ PROGRAM driver
 !$OMP END PARALLEL 
 
     CALL CloseInitCons()
+
+    IF (CONSTRAIN_RUN) THEN
+        DEALLOCATE(diurnal_old)
+        DEALLOCATE(diurnal_new)
+        DEALLOCATE(diurnal_rates)
+    END IF
 END PROGRAM driver
