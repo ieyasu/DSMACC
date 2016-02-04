@@ -7,13 +7,14 @@
     INTEGER :: NEED_CH4_IDX, NEED_H2_IDX
     INTEGER :: CONST_NOX_SPC_IDX
     INTEGER :: IntTime
-    CHARACTER(LEN=15) :: file_spec_names(10000) ! as listed in Init_cons.dat
+    CHARACTER(LEN=15), ALLOCATABLE :: file_spec_names(:)
     ! at index of of species in file, stores index into spc_names
-    INTEGER, ALLOCATABLE :: file_spec_idx(:)
+    INTEGER, ALLOCATABLE :: file_spec_idx(:), const_method(:)
+    REAL(dp), ALLOCATABLE :: fconcs(:)
     INTEGER :: n_file_specs ! number of species given in Init_cons.dat
+    INTEGER :: n_points
     LOGICAL :: CONSTRAIN_RUN, CONSTRAIN_NOX
     LOGICAL :: OUTPUT_LAST_24
-    INTEGER :: const_method(10000), LINECOUNT
 
     INTEGER, PARAMETER :: OUT_UNIT = 6, ERROR_UNIT = 0, &
         SPEC_UNIT = 8, RATE_UNIT = 7, CONS_UNIT = 21

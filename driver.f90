@@ -56,7 +56,7 @@ PROGRAM driver
 ! XXX good luck with that :/
 
     !This is the loop of different points in the Init_cons.dat file
-    DO point = 1, LINECOUNT-3
+    DO point = 1, n_points
 !$OMP CRITICAL
         CALL NextInitCons(point)
 !$OMP END CRITICAL

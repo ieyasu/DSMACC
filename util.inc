@@ -9,6 +9,7 @@ SUBROUTINE OpenInitCons()
 
     INTEGER :: I, J, iostat
     LOGICAL :: SPEC_CH4, SPEC_H2
+    CHARACTER(LEN=15) :: str(10000)
 
     OPEN(UNIT=CONS_UNIT, FILE='Init_cons.dat', IOSTAT=iostat)
     IF (iostat /= 0) THEN
@@ -16,17 +17,49 @@ SUBROUTINE OpenInitCons()
         STOP
     END IF
 
-    ! count lines in file
-    linecount = 0
-    DO WHILE (.NOT. IS_IOSTAT_END(iostat))
-        ! XXX if we encounter a blank line, stop counting
-        READ (CONS_UNIT,*,IOSTAT=iostat)
-        linecount = linecount + 1
-    END DO
-    WRITE (OUT_UNIT, *) 'Input file has ',linecount,' lines'
+    n_points = 0
 
-    IF (linecount <= 3) THEN
-        PRINT *, "Init_cons.dat has too few lines (<= 3)"
+    READ(CONS_UNIT,*,IOSTAT=iostat) ! integration time
+    IF (iostat /= 0) GOTO 99
+    READ(CONS_UNIT,15,IOSTAT=iostat) str ! species list
+    IF (iostat /= 0) GOTO 99
+    READ(CONS_UNIT,*,IOSTAT=iostat) ! constraints
+    IF (iostat /= 0) GOTO 99
+
+    ! count species
+    n_file_specs = 0
+    DO I = 1, 10000
+        IF (LEN_TRIM(str(I)) == 0) EXIT
+        n_file_specs = n_file_specs + 1
+    END DO
+
+    IF (n_file_specs < 1) THEN
+        WRITE(ERROR_UNIT,*) 'Input file has no species defined?!'
+        STOP
+    ELSE IF (n_file_specs > 10000) THEN
+        WRITE(ERROR_UNIT,*) 'No more than 10,000 species allowed'
+        STOP
+    END IF
+
+    ALLOCATE(fconcs(n_file_specs))
+
+    ! count points
+    DO WHILE (.NOT. IS_IOSTAT_END(iostat))
+        fconcs(1) = -999.99
+        READ(CONS_UNIT,'(10000(e15.4,x))',IOSTAT=iostat) fconcs
+        IF (fconcs(1) == -999.99) THEN
+            print *, "blank line found"
+            EXIT ! blank line, assume end of points
+        END IF
+        n_points = n_points + 1
+    END DO
+    WRITE(OUT_UNIT, *) 'Input file has', n_file_specs, 'species at', &
+        n_points, 'points'
+
+99  IF (n_points < 1) THEN
+        PRINT *, "Init_cons.dat must have an integration time, " // &
+            "list of species, list of constraints and at least " // &
+            "one line of initial concentrations"
         STOP
     END IF
 
@@ -34,20 +67,21 @@ SUBROUTINE OpenInitCons()
     CLOSE(CONS_UNIT)
     OPEN(UNIT=CONS_UNIT, FILE='Init_cons.dat')
 
+    ALLOCATE(file_spec_names(n_file_specs))
+    ALLOCATE(const_method(n_file_specs))
+
     READ (CONS_UNIT, '(i10)') IntTime
-    READ (CONS_UNIT,'(10000(a15,x))') file_spec_names
-    READ (CONS_UNIT,'(10000(i15,x))') const_method
+    READ (CONS_UNIT,15) file_spec_names
+    READ (CONS_UNIT,16) const_method
+15 FORMAT (10000(a15,x))
+16 FORMAT (10000(i15,x))
 
     ! run configuration
     CONSTRAIN_NOX = .FALSE.
     SPEC_CH4 = .FALSE.
     SPEC_H2 = .FALSE.
-    DO I = 1, 10000
+    DO I = 1, n_file_specs
         file_spec_names(I) = ADJUSTL(file_spec_names(I))
-        IF (TRIM(file_spec_names(I)) == '') THEN
-            n_file_specs = I - 1
-            EXIT ! end of species list
-        END IF
 
         IF (TRIM(file_spec_names(I)) == 'NOx') THEN
             CONSTRAIN_NOX = .TRUE.
@@ -136,7 +170,6 @@ SUBROUTINE NextInitCons(counter)
 
     INTEGER :: I, J, counter
     LOGICAL :: FOUND
-    REAL(kind=dp) :: concs(10000)
     INTEGER :: COUNT_NOX_CONSTRAINTS, iostat
 
     ! Open the file with the info
@@ -150,43 +183,43 @@ SUBROUTINE NextInitCons(counter)
     !VAR(:) = 0.    ! MSB should not need this,
     !C(1:NVAR) = 0. ! MSB or this - in fact, was wrong max index
 
-    READ(CONS_UNIT,'(10000(e15.4,x))',IOSTAT=iostat) concs
+    READ(CONS_UNIT,'(10000(e15.4,x))',IOSTAT=iostat) fconcs
 
     DO I = 1, n_file_specs
         FOUND = .TRUE.
         SELECT CASE (TRIM(file_spec_names(I)))
         CASE ('H2O')
-            H2O = concs(I)
+            H2O = fconcs(I)
         CASE ('PRESS')
-            PRESS = concs(I)
+            PRESS = fconcs(I)
         CASE ('LAT')
-            LAT = concs(I)
+            LAT = fconcs(I)
         CASE ('LON')
-            LON = concs(I)
+            LON = fconcs(I)
         CASE ('TEMP')
-            TEMP = concs(I)
+            TEMP = fconcs(I)
         CASE ('JDAY')
             ! XXX must be set - check somewhere
-            JDAY = concs(I)
+            JDAY = fconcs(I)
         CASE ('NOx', 'TIME(GMTs)')
             ! found - but do nothing else
         CASE ('O3COL')
-            O3COL = concs(I)
+            O3COL = fconcs(I)
         CASE ('ALBEDO')
-            ALBEDO = concs(I)
+            ALBEDO = fconcs(I)
         CASE ('SAREA')
-            SAREA = concs(I)
+            SAREA = fconcs(I)
         CASE ('RP1')
-            RP1 = concs(I)
+            RP1 = fconcs(I)
         CASE ('JNO2')
-            IF (CONST_METHOD(I) >= 1)  JNO2 = concs(I)
+            IF (CONST_METHOD(I) >= 1)  JNO2 = fconcs(I)
             IF (CONST_METHOD(I) == 2) THEN 
                 JREPEAT = 1
             ELSE
                 JREPEAT = 0
             END IF
         CASE ('JO1D')
-            IF (CONST_METHOD(I) >= 1)  JO1D = concs(I)
+            IF (CONST_METHOD(I) >= 1)  JO1D = fconcs(I)
             IF (CONST_METHOD(I) == 2) THEN 
                 JREPEAT = 1
             ELSE
@@ -201,10 +234,10 @@ SUBROUTINE NextInitCons(counter)
 
         J = file_spec_idx(I)
         IF (J > 0) THEN
-            VAR(J) = concs(I)
+            VAR(J) = fconcs(I)
 
             IF (const_method(I) == 1) THEN
-                CONSTRAIN(J) = concs(I)
+                CONSTRAIN(J) = fconcs(I)
             END IF
 
             FOUND = .TRUE.
@@ -281,6 +314,9 @@ END SUBROUTINE NextInitCons
 SUBROUTINE CloseInitCons()
     USE dsmacc_Global
 
+    DEALLOCATE(fconcs)
+    DEALLOCATE(file_spec_names)
+    DEALLOCATE(const_method)
     DEALLOCATE(file_spec_idx)
 
     CLOSE(CONS_UNIT)
