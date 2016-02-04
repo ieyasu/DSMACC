@@ -137,7 +137,6 @@ SUBROUTINE NextInitCons(counter)
     INTEGER :: I, J, counter
     LOGICAL :: FOUND
     REAL(kind=dp) :: concs(10000)
-    !REAL(kind=dp) :: oldvar(10000)
     INTEGER :: COUNT_NOX_CONSTRAINTS, iostat
 
     ! Open the file with the info
@@ -145,15 +144,11 @@ SUBROUTINE NextInitCons(counter)
     CALL flush(OUT_UNIT)
 
     ! Set everything to zero
-    ! XXX should these be here or in driver.f90 or what?
-    DO I=1,NVAR
-        !OLDVAR(I)=C(I)
-        VAR(I)=0. ! defined by KPP in dsmacc_Global.f90
-        C(I)=0. ! in src/constants.f90
-    END DO
     SAREA=0.
     ALBEDO=0.
     RP1=0.
+    !VAR(:) = 0.    ! MSB should not need this,
+    !C(1:NVAR) = 0. ! MSB or this - in fact, was wrong max index
 
     time=tstart ! XXX why is this here and not back in driver.f90?
 
@@ -229,15 +224,8 @@ SUBROUTINE NextInitCons(counter)
     H2O=H2O*CFACTOR 
     DO I=1,NVAR
         VAR(I)=VAR(I)*CFACTOR
-        !  IF (OLDVAR(I) /= CONSTRAIN(I)) THEN 
         CONSTRAIN(I)=CONSTRAIN(I)*CFACTOR
-        !  END IF
     END DO
-
-    !DO I=1,NVAR
-    !    C(I)=0.
-    !    IF (VAR(I) .EQ. 0) VAR(I)=OLDVAR(I)  
-    !ENDDO
 
     IF (NEED_CH4_IDX > 0) THEN
         J = NEED_CH4_IDX
