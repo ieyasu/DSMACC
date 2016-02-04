@@ -23,7 +23,7 @@ libtuv.a: $(OBJS)
 
 depend: depend.mk
 depend.mk: $(SRCS)
-	../sfmakedepend --file=$@ *.f
+	../bin/sfmakedepend --file=$@ *.f
 
 clean:
 	rm -f *.o *.mod lib*.a

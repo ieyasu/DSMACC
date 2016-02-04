@@ -29,7 +29,7 @@ $(PROG): depend.mk $(OBJS) ../tuv/libtuv.a
 # sfmakedpend comes from http://www.arsc.edu/~kate/Perl
 depend: depend.mk
 depend.mk: $(DSRC) $(TUVSRC)
-	../sfmakedepend --file=depend.mk $(DSRC) $(TUVSRC)
+	../bin/sfmakedepend --file=depend.mk $(DSRC) $(TUVSRC)
 
 clean:
 	rm -f *.o *.mod *.log *~ depend.mk.old
