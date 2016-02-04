@@ -16,7 +16,7 @@ PROGRAM driver
     REAL(dp), ALLOCATABLE :: DIURNAL_RATES(:,:)
     REAL(dp), ALLOCATABLE :: COLD(:) ! for error reporting
 
-    INTEGER  :: ERROR, I, IJ, JK, point
+    INTEGER  :: ERROR, point, I, K
     INTEGER :: day_tsteps, STEPS_PER_DAY
     LOGICAL :: reached_steady_state
 
@@ -123,16 +123,16 @@ PROGRAM driver
 
         IF (CONSTRAIN_NOX) THEN ! calculate the total NOx in the model 
             TNOX_OLD=0.
-            DO JK=1,NVAR
-                TNOX_OLD = TNOX_OLD + C(JK) * NOX(JK)
+            DO K=1,NVAR
+                TNOX_OLD = TNOX_OLD + C(K) * NOX(K)
             END DO
         END IF
 
         ! Initialize model state
         IF (CONSTRAIN_RUN) THEN
             DO I = 1, NVAR
-                DO IJ = 1, STEPS_PER_DAY
-                    DIURNAL_OLD(I,IJ) = 0.
+                DO K = 1, STEPS_PER_DAY
+                    DIURNAL_OLD(I,K) = 0.
                 END DO
             END DO
             reached_steady_state = .FALSE.
@@ -331,14 +331,14 @@ CONTAINS
         fracdiff=0.
         nfrac=0
         DO I=1,NVAR
-            DO JK=1,day_tsteps
+            DO K=1,day_tsteps
                 ! Add up for all species and time point in the day
                 ! if there is a concentration calculated
-                IF (DIURNAL_NEW(I,JK) > 1.e2 .AND. &
+                IF (DIURNAL_NEW(I,K) > 1.e2 .AND. &
                     TRIM(SPC_NAMES(I)) /= 'DUMMY') THEN
                     fracdiff = fracdiff + &
-                        ABS(DIURNAL_OLD(I,JK) - DIURNAL_NEW(I,JK)) / &
-                        DIURNAL_NEW(I,JK)
+                        ABS(DIURNAL_OLD(I,K) - DIURNAL_NEW(I,K)) / &
+                        DIURNAL_NEW(I,K)
                     nfrac = nfrac + 1
                 END IF
             END DO
