@@ -21,7 +21,7 @@ PROGRAM driver
     INTEGER :: day_tsteps, STEPS_PER_DAY
     LOGICAL :: reached_steady_state
 
-    REAL(dp) :: NOXRATIO, NEW_TIME
+    REAL(dp) :: NOXRATIO
     REAL(dp), ALLOCATABLE, DIMENSION(:,:) :: DIURNAL_OLD, DIURNAL_NEW, &
         DIURNAL_RATES
 
@@ -168,11 +168,10 @@ PROGRAM driver
         ! If we are running a free running model output the initial condition
         ! so T=0 of the output file gives the initial condition
         IF (.NOT. CONSTRAIN_RUN) THEN 
-            CALL WriteData()
+            CALL WriteData(TIME)
         END IF
 
         WRITE(ERROR_UNIT,*) 'Concentrations in ppb'
-        ! XXX nmonitor is provided by KPP; how is it determined?
         IF (NMONITOR > 0) THEN
             WRITE(ERROR_UNIT,'(100000(a25,"!"))') 'TIME', (SPC_NAMES(MONITOR(i)),i=1,NMONITOR)
             WRITE(ERROR_UNIT,'(100000(E25.16E3,"!"))') time, (C(MONITOR(i))/CFACTOR * 1e9,i=1,NMONITOR)
@@ -183,6 +182,8 @@ PROGRAM driver
 
             ! Update the rate constants
             CALL Update_RCONST()
+
+            ! XXX this copying will be SLOW. Any way to avoid it?
             COLD(:) = C(:)
 
             ! Integrate model forward 1 timestep
@@ -194,11 +195,11 @@ PROGRAM driver
                 WRITE(OUT_UNIT,*) 'Integration error at point', counter, &
                     'time', time
                 IF (NMONITOR > 0) THEN
-                    WRITE(OUT_UNIT,'(100000(E25.16E3,"!"))') time,&
-                        (C(MONITOR(i))/CFACTOR * 1e9,i=1,NMONITOR)
-                    WRITE(OUT_UNIT,'(100000(E25.16E3,"!"))') time,&
-                        ((C(MONITOR(i))-COLD(MONITOR(i)))/COLD(MONITOR(i))/CFACTOR&
-                        * 1e9,i=1,NMONITOR)
+                    WRITE(OUT_UNIT,'(100000(E25.16E3,"!"))') time, &
+                        (C(MONITOR(i))/CFACTOR*1e9, i=1,NMONITOR)
+                    WRITE(OUT_UNIT,'(100000(E25.16E3,"!"))') time, &
+                        ((C(MONITOR(i))-COLD(MONITOR(i))) / &
+                         COLD(MONITOR(i))/CFACTOR*1e9, i=1,NMONITOR)
                 END IF
 
                 ! XXX why did orig. code zero out C here?!
@@ -259,30 +260,15 @@ PROGRAM driver
                 CALL CONSTRAINED_STEP
                 IF (reached_steady_state) EXIT
             ELSE
-                CALL WriteData() ! write timestep data
+                CALL WriteData(TIME) ! write timestep data
             END IF
         END DO time_loop
 
 
-1000    IF (CONSTRAIN_RUN .AND. (.NOT. OUTPUT_LAST_24)) THEN
-            CALL WriteData() ! Output final timestep
-        END IF
-
-        ! XXX can't figure this ahead of time since we have to wait until
-        ! XXX model has reached a steady state
-
-        ! XXX *do* want to reuse util.inc code, especially because
-        ! XXX we need to not duplicate the formatting
-        IF (OUTPUT_LAST_24) THEN
-            DO I = 1, day_tsteps
-                NEW_TIME = I * DT
-                WRITE (SPEC_UNIT,999) NEW_TIME,LAT, LON, PRESS, TEMP, H2O, &
-                    CFACTOR, RO2, (DIURNAL_NEW(JK,I),JK=1,NVAR)
-                WRITE (RATE_UNIT,999) NEW_TIME,LAT, LON, PRESS, TEMP, H2O, &
-                    CFACTOR, (DIURNAL_RATES(JK,I),JK=1,NREACT)
-            END DO
-999         FORMAT(E24.16,100000(1X,E24.16))
-        END IF
+1000    print *, "out of time loop"
+        !IF (CONSTRAIN_RUN .AND. (.NOT. OUTPUT_LAST_24)) THEN
+        !    CALL WriteData() ! Output final timestep
+        !END IF
 
         CALL CloseDataFiles(counter)
     END DO ! each independent 'point' to run at
@@ -302,7 +288,7 @@ CONTAINS
     ! Save timestep data and, if at end of day, compare with previous day
     ! to see if model has reached steady state
     SUBROUTINE CONSTRAINED_STEP()
-        REAL(dp) :: fracdiff
+        REAL(dp) :: fracdiff, when
         INTEGER  :: nfrac
 
         ! completed another constrained timestep
@@ -329,9 +315,9 @@ CONTAINS
             ! Remember the constrained NOx species is given by the negative constrained value
             NOXRATIO = -CONSTRAIN(CONST_NOX_SPC_IDX) / C(CONST_NOX_SPC_IDX)
 
-            ! Multiply all the NOx species by the ratio so 
+            ! Multiply all the NOx species by the ratio so
             DO I=1,NVAR
-                IF (NOX(I) /= 0) THEN 
+                IF (NOX(I) /= 0) THEN
                     C(I) = C(I) * NOXRATIO
                 END IF
             END DO
@@ -362,7 +348,24 @@ CONTAINS
 
         ! check if model has converged to steady state
         IF (fracdiff <= 1e-3) THEN
-            reached_steady_state = .TRUE. ! yay! we're done
+            reached_steady_state = .TRUE. ! yay~ we're done integrating
+
+            IF (OUTPUT_LAST_24) THEN
+                ! XXX use WriteData() code (or format) to output today's data
+                DO I = 1, day_tsteps
+                    when = I * DT
+                    WRITE (SPEC_UNIT,997) when, LAT, LON, PRESS, TEMP, H2O, &
+                        CFACTOR, RO2, (DIURNAL_NEW(JK,I),JK=1,NVAR)
+                    WRITE (RATE_UNIT,998) when, LAT, LON, PRESS, TEMP, H2O, &
+                        CFACTOR, (DIURNAL_RATES(JK,I),JK=1,NREACT)
+997 FORMAT (100000(E25.16E3,"!"))
+998 FORMAT (100000(E50.16E3,"!"))
+
+                END DO
+            ELSE
+                ! output last timestep
+                CALL WriteData(JDAY)
+            END IF
         ELSE
             ! remember today to compare with tomorrow and reset
             DO I=1,NVAR

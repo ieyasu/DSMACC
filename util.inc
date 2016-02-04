@@ -312,6 +312,9 @@ SUBROUTINE OpenDataFiles(counter)
         STOP
     END IF
 
+    ! XXX look into storing JNO2FACT, JO1DFACT (others?) only once,
+    ! XXX as they do not appear to change in the time step loop
+
     ! write headers
     WRITE(SPEC_UNIT,'(100000(a25,"!"))') 'TIME', 'LAT', 'LON', 'PRESS', &
         'TEMP', 'H2O', 'CFACTOR', 'M', 'N2', 'O2', 'JNO2FACT', 'JO1DFACT', &
@@ -324,27 +327,18 @@ END SUBROUTINE OpenDataFiles
 
 
 ! Write current model values to Spec and Rate data files.
-SUBROUTINE WriteData()
+SUBROUTINE WriteData(when)
     USE dsmacc_Global
     USE dsmacc_Monitor
     USE dsmacc_Integrator
 
+    REAL(dp), INTENT(IN) :: when
     INTEGER :: i
 
-    ! XXX look at splitting this here into separate functions
-    ! XXX if we can tell which one we want in the time loop in driver.f90
-    IF (CONSTRAIN_RUN) THEN ! JDAY instead of TIME
-        ! XXX why all of C here, and not the NLOOKAT thing in the ELSE clause?
-        WRITE(SPEC_UNIT, 125) JDAY, LAT, LON, PRESS, TEMP, H2O, CFACTOR, &
-            M, N2, O2, JFACTNO2, JFACTO1D, RO2, C
-        WRITE(RATE_UNIT, 150) JDAY, LAT, LON, PRESS, TEMP, H2O, CFACTOR, &
-            M,N2, O2, JFACTNO2, JFACTO1D, RO2, RCONST
-    ELSE
-        WRITE(SPEC_UNIT, 125) TIME, LAT, LON, PRESS, TEMP, H2O, CFACTOR, &
-            M, N2, O2, JFACTNO2, JFACTO1D,RO2, (C(LOOKAT(i)), i=1,NLOOKAT)
-        WRITE(RATE_UNIT, 150) TIME, LAT, LON, PRESS, TEMP, H2O, CFACTOR, &
-            M, N2, O2, JFACTNO2, JFACTO1D, RO2, RCONST
-    END IF
+    WRITE(SPEC_UNIT, 125) when, LAT, LON, PRESS, TEMP, H2O, CFACTOR, &
+        M, N2, O2, JFACTNO2, JFACTO1D, RO2, (C(LOOKAT(i)), i=1,NLOOKAT)
+    WRITE(RATE_UNIT, 150) when, LAT, LON, PRESS, TEMP, H2O, CFACTOR, &
+        M, N2, O2, JFACTNO2, JFACTO1D, RO2, RCONST
 125 FORMAT (100000(E25.16E3,"!"))
 150 FORMAT (100000(E50.16E3,"!"))
 
