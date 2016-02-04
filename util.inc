@@ -110,19 +110,19 @@ SUBROUTINE OpenInitCons()
     IF (IntTime > 0) THEN ! normal # of seconds of integration time run
         WRITE (OUT_UNIT,*) 'Integrate for ',IntTime,' seconds'
         CONSTRAIN_RUN = .FALSE.
-    ELSE IF (IntTime == -1) THEN
-        WRITE (OUT_UNIT,*) 'Integration to convergence; output final timestep'
+    ELSE
+        IF (IntTime == -1) THEN
+            WRITE (OUT_UNIT,*) 'Integration to convergence; output final timestep'
+        ELSE IF (IntTime == -2) THEN
+            WRITE (OUT_UNIT,*) 'Integration to convergence; output last 24 hours'
+            OUTPUT_LAST_24 = .TRUE.
+        ELSE ! IntTime < -2 or == 0
+            WRITE (ERROR_UNIT,*) 'First line of Init_cons.dat must be '// &
+                '-1, -2 or an integration time in seconds'
+            STOP
+        END IF
         CONSTRAIN_RUN = .TRUE.
-        INTTIME = 50*24.*60.*60. ! max run time of 50 days
-    ELSE IF (IntTime == -2) THEN
-        WRITE (OUT_UNIT,*) 'Integration to convergence; output last 24 hours'
-        OUTPUT_LAST_24 = .TRUE.
-        CONSTRAIN_RUN = .TRUE.
-        INTTIME = 50*24.*60.*60. ! max run time of 50 days
-    ELSE ! IntTime <= 0
-        WRITE (OUT_UNIT,*) 'First line of Init_cons.dat must be -1, -2 or ' // &
-            'an integration time in seconds'
-        STOP
+        IntTime = 50*24.*60.*60. ! max run time of 50 days
     END IF
 END SUBROUTINE OpenInitCons
 
