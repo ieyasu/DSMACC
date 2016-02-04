@@ -161,8 +161,6 @@ SUBROUTINE NextInitCons(counter)
 
     DO I = 1, n_file_specs
         FOUND = .TRUE.
-        ! XXX what's another way to do this without doing string comparisons?
-        ! XXX I'd have to store each special index ahead of time
         SELECT CASE (TRIM(file_spec_names(I)))
         CASE ('H2O')
             H2O = concs(I)
@@ -175,6 +173,7 @@ SUBROUTINE NextInitCons(counter)
         CASE ('TEMP')
             TEMP = concs(I)
         CASE ('JDAY')
+            ! XXX must be set - check somewhere
             JDAY = concs(I)
         CASE ('NOx', 'TIME(GMTs)')
             ! found - but do nothing else
@@ -335,9 +334,9 @@ SUBROUTINE WriteData()
     ! XXX look at splitting this here into separate functions
     ! XXX if we can tell which one we want in the time loop in driver.f90
     IF (CONSTRAIN_RUN) THEN ! JDAY instead of TIME
+        ! XXX why all of C here, and not the NLOOKAT thing in the ELSE clause?
         WRITE(SPEC_UNIT, 125) JDAY, LAT, LON, PRESS, TEMP, H2O, CFACTOR, &
             M, N2, O2, JFACTNO2, JFACTO1D, RO2, C
-        ! XXX why just C here, and not the NLOOKAT thing in the ELSE clause?
         WRITE(RATE_UNIT, 150) JDAY, LAT, LON, PRESS, TEMP, H2O, CFACTOR, &
             M,N2, O2, JFACTNO2, JFACTO1D, RO2, RCONST
     ELSE

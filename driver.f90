@@ -17,19 +17,18 @@ PROGRAM driver
     ! Photolysis calculation variables
     REAL(dp) :: Alta
 
-    INTEGER  :: i, Daycounter, CONSTNOXSPEC, JK, counter
-    INTEGER :: STEPS_PER_DAY
+    INTEGER  :: i, CONSTNOXSPEC, JK, counter
+    INTEGER :: day_tsteps, STEPS_PER_DAY
+    LOGICAL :: reached_steady_state
 
     REAL(dp) :: NOXRATIO, NEW_TIME
     REAL(dp), ALLOCATABLE, DIMENSION(:,:) :: DIURNAL_OLD, DIURNAL_NEW, &
         DIURNAL_RATES
-    REAL(dp) :: Fracdiff
-    INTEGER  :: FRACCOUNT
 
     ! DT - timestep var defined by KPP in the dsmacc_Global module.
     ! It is the timestep for output, rate constant and photolysis rates.
     DT = 1200. ! 20 minutes
-    STEPS_PER_DAY = 1 + (24 * 60 * 60) / INT(DT)
+    STEPS_PER_DAY = (24 * 60 * 60) / INT(DT)
 
     STEPMIN = 0.0_dp
     STEPMAX = 0.0_dp
@@ -91,13 +90,13 @@ PROGRAM driver
         WRITE(OUT_UNIT,*) 'Local Time =', Tstart/(60.*60.)
         !WRITE(OUT_UNIT,*) 'SZA =',ZENANG(int(jday),Tstart/(60.*60.),lat)*180./(4*ATAN(1.))
 
+        ! XXX this stuff belongs over in util.inc
         IF (o3col == 0) THEN 
             o3col = 260.
             WRITE(OUT_UNIT,*) 'Ozone column not specified; using 260 Dobsons'
         ELSE
             WRITE(OUT_UNIT,*) 'Ozone column =', o3col
         END IF
-
         IF (albedo == 0) THEN 
             albedo = 0.1
             WRITE(OUT_UNIT,*) 'Albedo not specified; using 0.1'
@@ -131,6 +130,8 @@ PROGRAM driver
                     DIURNAL_OLD(I,IJ) = 0.
                 END DO
             END DO
+            reached_steady_state = .FALSE.
+            day_tsteps = 0
         END IF
 
         ! Calculate clear sky photolysis rates
@@ -170,10 +171,7 @@ PROGRAM driver
             CALL WriteData()
         END IF
 
-
-        Daycounter = 0
-
-        WRITE(ERROR_UNIT,*)'Concentrations in ppb'
+        WRITE(ERROR_UNIT,*) 'Concentrations in ppb'
         ! XXX nmonitor is provided by KPP; how is it determined?
         IF (NMONITOR > 0) THEN
             WRITE(ERROR_UNIT,'(100000(a25,"!"))') 'TIME', (SPC_NAMES(MONITOR(i)),i=1,NMONITOR)
@@ -186,7 +184,8 @@ PROGRAM driver
             ! Update the rate constants
             CALL Update_RCONST()
             COLD(:) = C(:)
-            ! Integrate the model forwards 1 timestep
+
+            ! Integrate model forward 1 timestep
             CALL INTEGRATE( TIN = time, TOUT = time+DT, RSTATUS_U = RSTATE, &
                 ICNTRL_U = (/ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 /),&
                 IERR_U=ERROR)
@@ -224,7 +223,6 @@ PROGRAM driver
             ! Update the time to reflect the integration has taken place and 
             time = RSTATE(1) ! XXX why is rstate(1) different than tout?
             JDAY = BASE_JDAY + time / 24. / 60. / 60.
-            Daycounter = Daycounter + 1
 
             IF (CONSTRAIN_NOX) THEN
                 ! Calculate total NOx in the box
@@ -252,90 +250,17 @@ PROGRAM driver
                 END IF
             END DO
 
-            ! If we are not doing a constrained run then output the concentrations
-            IF (.NOT. CONSTRAIN_RUN) THEN 
-                CALL WriteData()
-            END IF
-
             IF (NMONITOR > 0) THEN
                 WRITE(ERROR_UNIT,'(100000(E25.16E3,"!"))') time,&
                     (C(MONITOR(i))/CFACTOR * 1e9,i=1,NMONITOR)
             END IF
 
-            ! If we are doing a constrained run we need to store the diurnal profile of all the species
-            IF (CONSTRAIN_RUN) THEN
-                DO I=1,NVAR
-                    DIURNAL_NEW(I,DAYCOUNTER) = C(I)
-                END DO
-
-                DO I=1,NREACT
-                    DIURNAL_RATES(I,DAYCOUNTER) = RCONST(I)
-                END DO
-
-                ! Are we at the end of a day?
-                ! If so we need to 
-                !   1) fiddle with the NOX to ensure it has the right concentrations see if we have reached a steady state
-                IF (DAYCOUNTER*DT >= 24.*60.*60.) THEN
-                    ! Sort out the NOx. Need to increase the NOx concentration so that the constrained species is right
-
-                    ! If we are constraining NOx then:
-                    IF (CONSTRAIN_NOX) THEN
-                        ! Calculate the ratio between the value we the constrained NOx species and what we have
-                        ! Remember the constrained NOx species is given by the negative constrained value
-                        NOXRATIO = -CONSTRAIN(CONST_NOX_SPC_IDX) / C(CONST_NOX_SPC_IDX)
-
-                        ! Multiply all the NOx species by the ratio so 
-                        DO I=1,NVAR
-                            IF (NOX(I) /= 0) THEN 
-                                C(I) = C(I) * NOXRATIO
-                            END IF
-                        END DO
-                    END IF
-                    ! Update the total amount of NOx in box
-                    TNOX_OLD = TNOX_OLD * NOXRATIO
-
-                    ! Lets see how much the diurnal ratios have changed since the last iteration
-
-                    ! Frac diff is our metric for how much it has changed 
-                    FRACDIFF=0.
-                    FRACCOUNT=0
-                    ! Add up for all species and for each time point in the day
-                    DO I=1,NVAR
-                        DO JK=1,DAYCOUNTER
-                            ! If there is a concentration calculated
-                            IF (DIURNAL_NEW(I,JK) > 1.e2 .AND. &
-                                TRIM(SPC_NAMES(I)) /= 'DUMMY') THEN 
-                                ! Calculate the absolute value of the fractional difference and add it on
-                                ! Increment the counter to calculate the average
-                                FRACDIFF = FRACDIFF + &
-                                    ABS(DIURNAL_OLD(I,JK) - DIURNAL_NEW(I,JK))/&
-                                    DIURNAL_NEW(I,JK)
-                                FRACCOUNT = FRACCOUNT + 1
-                            END IF
-                        END DO
-                    END DO
-                    FRACDIFF = FRACDIFF / FRACCOUNT
-
-                    ! Output the diagnostic
-                    WRITE(OUT_UNIT,*) &
-                        'Fraction difference in the diurnal profile:', FRACDIFF
-
-                    ! check if model has converged to steady state
-                    ! XXX won't exit unless at end of day
-                    IF (FRACDIFF <= 1e-3) EXIT
-
-                    ! Store the new diurnal profile as the old one so we can compare with the next day
-                    DO I=1,NVAR
-                        DO JK=1,DAYCOUNTER
-                            DIURNAL_OLD(I,JK) = DIURNAL_NEW(I,JK)
-                        END DO
-                    END DO
-
-                    ! XXX this appears to be some kind of timestep counter,
-                    ! XXX reset at end of day
-                    DAYCOUNTER = 0
-                END IF ! end of day
-            END IF ! CONSTRAIN_RUN
+            IF (CONSTRAIN_RUN) THEN ! see if run is done
+                CALL CONSTRAINED_STEP
+                IF (reached_steady_state) EXIT
+            ELSE
+                CALL WriteData() ! write timestep data
+            END IF
         END DO time_loop
 
 
@@ -349,7 +274,7 @@ PROGRAM driver
         ! XXX *do* want to reuse util.inc code, especially because
         ! XXX we need to not duplicate the formatting
         IF (OUTPUT_LAST_24) THEN
-            DO I = 1, DAYCOUNTER
+            DO I = 1, day_tsteps
                 NEW_TIME = I * DT
                 WRITE (SPEC_UNIT,999) NEW_TIME,LAT, LON, PRESS, TEMP, H2O, &
                     CFACTOR, RO2, (DIURNAL_NEW(JK,I),JK=1,NVAR)
@@ -371,4 +296,83 @@ PROGRAM driver
         DEALLOCATE(diurnal_new)
         DEALLOCATE(diurnal_rates)
     END IF
+
+CONTAINS
+
+    ! Save timestep data and, if at end of day, compare with previous day
+    ! to see if model has reached steady state
+    SUBROUTINE CONSTRAINED_STEP()
+        REAL(dp) :: fracdiff
+        INTEGER  :: nfrac
+
+        ! completed another constrained timestep
+        day_tsteps = day_tsteps + 1
+
+        ! save diurnal profile of all species
+        DO I=1,NVAR
+            DIURNAL_NEW(I,day_tsteps) = C(I)
+        END DO
+        DO I=1,NREACT
+            DIURNAL_RATES(I,day_tsteps) = RCONST(I)
+        END DO
+
+        IF (day_tsteps < steps_per_day) RETURN ! not end of day
+
+        ! Do end-of-day checks
+
+        ! We need to fiddle with the NOX to ensure it has the right concentrations and see if we have reached a steady state
+
+        ! Sort out the NOx. Need to increase the NOx concentration so that the constrained species is right
+
+        IF (CONSTRAIN_NOX) THEN
+            ! Calculate the ratio between the value we the constrained NOx species and what we have
+            ! Remember the constrained NOx species is given by the negative constrained value
+            NOXRATIO = -CONSTRAIN(CONST_NOX_SPC_IDX) / C(CONST_NOX_SPC_IDX)
+
+            ! Multiply all the NOx species by the ratio so 
+            DO I=1,NVAR
+                IF (NOX(I) /= 0) THEN 
+                    C(I) = C(I) * NOXRATIO
+                END IF
+            END DO
+        END IF
+        ! Update the total amount of NOx in box
+        TNOX_OLD = TNOX_OLD * NOXRATIO
+
+        ! See how much the diurnal ratios have changed since yesterday
+        fracdiff=0.
+        nfrac=0
+        DO I=1,NVAR
+            DO JK=1,day_tsteps
+                ! Add up for all species and time point in the day
+                ! if there is a concentration calculated
+                IF (DIURNAL_NEW(I,JK) > 1.e2 .AND. &
+                    TRIM(SPC_NAMES(I)) /= 'DUMMY') THEN
+                    fracdiff = fracdiff + &
+                        ABS(DIURNAL_OLD(I,JK) - DIURNAL_NEW(I,JK)) / &
+                        DIURNAL_NEW(I,JK)
+                    nfrac = nfrac + 1
+                END IF
+            END DO
+        END DO
+        fracdiff = fracdiff / nfrac
+
+        ! Output the diagnostic
+        WRITE(OUT_UNIT,*) 'Fractional difference in diurnal profile:', fracdiff
+
+        ! check if model has converged to steady state
+        IF (fracdiff <= 1e-3) THEN
+            reached_steady_state = .TRUE. ! yay! we're done
+        ELSE
+            ! remember today to compare with tomorrow and reset
+            DO I=1,NVAR
+                DO JK=1,day_tsteps
+                    DIURNAL_OLD(I,JK) = DIURNAL_NEW(I,JK)
+                END DO
+            END DO
+
+            day_tsteps = 0
+        END IF
+    END SUBROUTINE CONSTRAINED_STEP
+
 END PROGRAM driver
