@@ -170,10 +170,13 @@ PROGRAM driver
             CALL WriteCurrentData(TIME)
         END IF
 
+251 FORMAT (100000(a25,"!"))
+252 FORMAT (100000(E25.16E3,"!"))
+
         WRITE(ERROR_UNIT,*) 'Concentrations in ppb'
         IF (NMONITOR > 0) THEN
-            WRITE(ERROR_UNIT,'(100000(a25,"!"))') 'TIME', (SPC_NAMES(MONITOR(i)),i=1,NMONITOR)
-            WRITE(ERROR_UNIT,'(100000(E25.16E3,"!"))') time, (C(MONITOR(i))/CFACTOR * 1e9,i=1,NMONITOR)
+            WRITE(ERROR_UNIT,251) 'TIME', (SPC_NAMES(MONITOR(i)),i=1,NMONITOR)
+            WRITE(ERROR_UNIT,252) time, (C(MONITOR(i))/CFACTOR * 1e9,i=1,NMONITOR)
         END IF
 
         ! This is the main loop for integrations
@@ -194,28 +197,20 @@ PROGRAM driver
                 WRITE(OUT_UNIT,*) 'Integration error at point', point, &
                     'time', time
                 IF (NMONITOR > 0) THEN
-                    WRITE(OUT_UNIT,'(100000(E25.16E3,"!"))') time, &
+                    WRITE(OUT_UNIT,252) time, &
                         (C(MONITOR(i))/CFACTOR*1e9, i=1,NMONITOR)
-                    WRITE(OUT_UNIT,'(100000(E25.16E3,"!"))') time, &
+                    WRITE(OUT_UNIT,252) time, &
                         ((C(MONITOR(i))-COLD(MONITOR(i))) / &
                          COLD(MONITOR(i))/CFACTOR*1e9, i=1,NMONITOR)
                 END IF
 
-                ! XXX why did orig. code zero out C here?!
-                !DO I=1,NVAR
-                !    C(I)=0.
-                !END DO
                 GOTO 1000
             END IF
 
             ! Traps for NaN
             DO I=1,NVAR
                 IF (ISNAN(C(I))) THEN
-                    WRITE(ERROR_UNIT, *) 'NaN found in - XXX -, exiting'
-                    ! XXX why did orig. code zero out C here?!
-                    !DO i=1,NVAR
-                    !    C(I)=0.
-                    !END DO
+                    WRITE(ERROR_UNIT, *) 'NaN found in C array, exiting'
                     GOTO 1000
                 END IF
             END DO
@@ -251,7 +246,7 @@ PROGRAM driver
             END DO
 
             IF (NMONITOR > 0) THEN
-                WRITE(ERROR_UNIT,'(100000(E25.16E3,"!"))') time,&
+                WRITE(ERROR_UNIT,252) time, &
                     (C(MONITOR(i))/CFACTOR * 1e9,i=1,NMONITOR)
             END IF
 
@@ -263,10 +258,7 @@ PROGRAM driver
             END IF
         END DO time_loop
 
-
-1000    print *, "out of time loop"
-
-        CALL CloseDataFiles(point)
+1000    CALL CloseDataFiles(point)
     END DO ! each independent 'point' to run at
 !$OMP END DO NOWAIT
 !$OMP END PARALLEL 
