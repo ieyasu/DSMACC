@@ -183,6 +183,8 @@ SUBROUTINE NextInitCons(counter)
     !VAR(:) = 0.    ! MSB should not need this,
     !C(1:NVAR) = 0. ! MSB or this - in fact, was wrong max index
 
+    JDAY = -999
+
     READ(CONS_UNIT,'(10000(e15.4,x))',IOSTAT=iostat) fconcs
 
     DO I = 1, n_file_specs
@@ -199,7 +201,6 @@ SUBROUTINE NextInitCons(counter)
         CASE ('TEMP')
             TEMP = fconcs(I)
         CASE ('JDAY')
-            ! XXX must be set - check somewhere
             JDAY = fconcs(I)
         CASE ('NOx', 'TIME(GMTs)')
             ! found - but do nothing else
@@ -249,6 +250,11 @@ SUBROUTINE NextInitCons(counter)
             WRITE (OUT_UNIT,*) 'Starts with an X so ignored and continued'   
         END IF
     END DO ! each concentration
+
+    IF (JDAY == -999) THEN
+        WRITE(ERROR_UNIT,*) "JDAY not specified; don't know when to start"
+        STOP
+    END IF
 
     CFACTOR=PRESS*1e2*1e-6/(8.314*TEMP)*6.022E23
 
