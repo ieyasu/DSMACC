@@ -150,8 +150,6 @@ SUBROUTINE NextInitCons(counter)
     !VAR(:) = 0.    ! MSB should not need this,
     !C(1:NVAR) = 0. ! MSB or this - in fact, was wrong max index
 
-    time=tstart ! XXX why is this here and not back in driver.f90?
-
     READ(CONS_UNIT,'(10000(e15.4,x))',IOSTAT=iostat) concs
 
     DO I = 1, n_file_specs
