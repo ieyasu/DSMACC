@@ -156,8 +156,9 @@ REAL(kind=dp) FUNCTION ZENITH ( LAT, LONG, JDAY )
     GMT = MOD(JDAY, 1.) * 24.
 
     !...identify and correct leap years
-    ! XXX add check for centuries divisible by 400
-    IF ( MOD( IIYEAR, 4 ) .EQ. 0 ) THEN
+    IF (MOD(IIYEAR, 4) == 0 .AND. &    ! divisible by 4 and
+        (MOD(IIYEAR, 100) /= 0 .OR. &  !   not a century, or
+         MOD(IIYEAR, 400) == 0)) THEN  !   century divisible by 400
         IMN( 2 ) = 29
     ELSE
         IMN( 2 ) = 28
