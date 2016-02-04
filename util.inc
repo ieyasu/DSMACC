@@ -327,18 +327,24 @@ END SUBROUTINE OpenDataFiles
 
 
 ! Write current model values to Spec and Rate data files.
-SUBROUTINE WriteData(when)
+SUBROUTINE WriteCurrentData(when)
+    USE dsmacc_Global, ONLY: C, RCONST
+    REAL(dp), INTENT(IN) :: when
+    CALL WriteData(when, C, RCONST)
+END SUBROUTINE WriteCurrentData
+
+SUBROUTINE WriteData(when, concs, rates)
     USE dsmacc_Global
     USE dsmacc_Monitor
     USE dsmacc_Integrator
 
-    REAL(dp), INTENT(IN) :: when
+    REAL(dp), INTENT(IN) :: when, concs(NVAR), rates(NREACT)
     INTEGER :: i
 
     WRITE(SPEC_UNIT, 125) when, LAT, LON, PRESS, TEMP, H2O, CFACTOR, &
-        M, N2, O2, JFACTNO2, JFACTO1D, RO2, (C(LOOKAT(i)), i=1,NLOOKAT)
+        M, N2, O2, JFACTNO2, JFACTO1D, RO2, (concs(LOOKAT(i)), i=1,NLOOKAT)
     WRITE(RATE_UNIT, 150) when, LAT, LON, PRESS, TEMP, H2O, CFACTOR, &
-        M, N2, O2, JFACTNO2, JFACTO1D, RO2, RCONST
+        M, N2, O2, JFACTNO2, JFACTO1D, RO2, rates
 125 FORMAT (100000(E25.16E3,"!"))
 150 FORMAT (100000(E50.16E3,"!"))
 

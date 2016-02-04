@@ -22,8 +22,8 @@ PROGRAM driver
     LOGICAL :: reached_steady_state
 
     REAL(dp) :: NOXRATIO
-    REAL(dp), ALLOCATABLE, DIMENSION(:,:) :: DIURNAL_OLD, DIURNAL_NEW, &
-        DIURNAL_RATES
+    REAL(dp), POINTER :: DIURNAL_OLD(:,:), DIURNAL_NEW(:,:)
+    REAL(dp), ALLOCATABLE :: DIURNAL_RATES(:,:)
 
     ! DT - timestep var defined by KPP in the dsmacc_Global module.
     ! It is the timestep for output, rate constant and photolysis rates.
@@ -168,7 +168,7 @@ PROGRAM driver
         ! If we are running a free running model output the initial condition
         ! so T=0 of the output file gives the initial condition
         IF (.NOT. CONSTRAIN_RUN) THEN 
-            CALL WriteData(TIME)
+            CALL WriteCurrentData(TIME)
         END IF
 
         WRITE(ERROR_UNIT,*) 'Concentrations in ppb'
@@ -260,15 +260,12 @@ PROGRAM driver
                 CALL CONSTRAINED_STEP
                 IF (reached_steady_state) EXIT
             ELSE
-                CALL WriteData(TIME) ! write timestep data
+                CALL WriteCurrentData(TIME)
             END IF
         END DO time_loop
 
 
 1000    print *, "out of time loop"
-        !IF (CONSTRAIN_RUN .AND. (.NOT. OUTPUT_LAST_24)) THEN
-        !    CALL WriteData() ! Output final timestep
-        !END IF
 
         CALL CloseDataFiles(counter)
     END DO ! each independent 'point' to run at
@@ -351,20 +348,13 @@ CONTAINS
             reached_steady_state = .TRUE. ! yay~ we're done integrating
 
             IF (OUTPUT_LAST_24) THEN
-                ! XXX use WriteData() code (or format) to output today's data
                 DO I = 1, day_tsteps
                     when = I * DT
-                    WRITE (SPEC_UNIT,997) when, LAT, LON, PRESS, TEMP, H2O, &
-                        CFACTOR, RO2, (DIURNAL_NEW(JK,I),JK=1,NVAR)
-                    WRITE (RATE_UNIT,998) when, LAT, LON, PRESS, TEMP, H2O, &
-                        CFACTOR, (DIURNAL_RATES(JK,I),JK=1,NREACT)
-997 FORMAT (100000(E25.16E3,"!"))
-998 FORMAT (100000(E50.16E3,"!"))
-
+                    CALL WriteData(when, DIURNAL_NEW(:,I), DIURNAL_RATES(:,I))
                 END DO
             ELSE
                 ! output last timestep
-                CALL WriteData(JDAY)
+                CALL WriteCurrentData(JDAY)
             END IF
         ELSE
             ! remember today to compare with tomorrow and reset
