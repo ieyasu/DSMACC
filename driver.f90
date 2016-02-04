@@ -11,10 +11,10 @@ PROGRAM driver
     REAL(dp) :: CALCJO1D, CALCJNO2
     REAL(dp) :: RSTATE(20)
     REAL(dp) :: BASE_JDAY
-
     REAL(dp) :: TNOX, TNOX_OLD, NOXRATIO
     REAL(dp), POINTER :: DIURNAL_OLD(:,:), DIURNAL_NEW(:,:)
     REAL(dp), ALLOCATABLE :: DIURNAL_RATES(:,:)
+    REAL(dp), ALLOCATABLE :: COLD(:) ! for error reporting
 
     INTEGER  :: ERROR, I, IJ, JK, point
     INTEGER :: day_tsteps, STEPS_PER_DAY
@@ -34,6 +34,10 @@ PROGRAM driver
     RTOL(1:NVAR) = 1.0e-5_dp
     ATOL(1:NVAR) = 1.0_dp
 
+    IF (NMONITOR > 0) THEN
+        ALLOCATE(COLD(NSPEC))
+    END IF
+
     ! Get run parameters from Init_cons.dat file
     CALL OpenInitCons()
 
@@ -46,8 +50,10 @@ PROGRAM driver
 
 !$OMP PARALLEL
 !$OMP DO
-! XXX this loop isn't going to be parallelizable without using separate
-! XXX unit numbers for each Spec_*.dat and Rate_*.dat files
+! XXX This loop isn't going to be parallelizable without using separate
+! XXX unit numbers for each Spec_*.dat and Rate_*.dat files.
+! XXX Probably need separate instances of KPP vars, e.g. C() so uh...
+! XXX good luck with that :/
 
     !This is the loop of different points in the Init_cons.dat file
     DO point = 1, LINECOUNT-3
@@ -185,8 +191,9 @@ PROGRAM driver
             ! Update the rate constants
             CALL Update_RCONST()
 
-            ! XXX this copying will be SLOW. Any way to avoid it?
-            COLD(:) = C(:)
+            IF (NMONITOR > 0) THEN
+                COLD(:) = C(:)
+            END IF
 
             ! Integrate model forward 1 timestep
             CALL INTEGRATE( TIN = time, TOUT = time+DT, RSTATUS_U = RSTATE, &
@@ -271,6 +278,10 @@ PROGRAM driver
         DEALLOCATE(diurnal_rates)
     END IF
 
+    IF (NMONITOR > 0) THEN
+        DEALLOCATE(COLD)
+    END IF
+
 CONTAINS
 
     ! Save timestep data and, if at end of day, compare with previous day
@@ -290,7 +301,10 @@ CONTAINS
             DIURNAL_RATES(I,day_tsteps) = RCONST(I)
         END DO
 
+
         IF (day_tsteps < steps_per_day) RETURN ! not end of day
+
+
 
         ! Do end-of-day checks
 
