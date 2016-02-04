@@ -357,15 +357,17 @@ CONTAINS
                 CALL WriteCurrentData(JDAY)
             END IF
         ELSE
-            ! remember today to compare with tomorrow and reset
-            DO I=1,NVAR
-                DO JK=1,day_tsteps
-                    DIURNAL_OLD(I,JK) = DIURNAL_NEW(I,JK)
-                END DO
-            END DO
-
-            day_tsteps = 0
+            CALL SWAP_DIURNAL
+            day_tsteps = 0 ! move on to next day
         END IF
     END SUBROUTINE CONSTRAINED_STEP
 
+    ! Swap diurnal new and old arrays to quickly reuse the former as the latter
+    SUBROUTINE SWAP_DIURNAL
+        REAL(dp), POINTER :: dp(:,:)
+
+        dp => DIURNAL_OLD
+        DIURNAL_OLD => DIURNAL_NEW
+        DIURNAL_NEW => dp
+    END SUBROUTINE SWAP_DIURNAL
 END PROGRAM driver
