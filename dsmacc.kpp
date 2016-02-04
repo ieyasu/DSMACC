@@ -1,9 +1,13 @@
 // include file with definition of the chemical species
 // and chemical equations
 
-//#INCLUDE ./mcm_subset.kpp 
+//#INCLUDE ./mcm_subset.kpp
 #INCLUDE ./CRI_subset.kpp
 
+
+//#INCLUDE ../inorganic.kpp
+//#INCLUDE ../organic.kpp
+//#INCLUDE ../depos.kpp
 
 #INCLUDE ../global.inc
 #INCLUDE ../rate.inc

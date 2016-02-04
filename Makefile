@@ -3,7 +3,7 @@ export KPP_HOME=$(PWD)/kpp
 
 DSMACC_SRC = driver.f90 dsmacc.kpp \
 	global.inc rate.inc util.inc photolysis.inc \
-	inorganic.kpp organic.kpp
+	inorganic.kpp organic.kpp depos.kpp
 
 .PHONY: all dsmacc kpp tuv depend check clean distclean
 
@@ -15,6 +15,9 @@ bin/dsmacc: src/dsmacc_Main.f90 tuv src/depend.mk Makefile.defs
 
 src/dsmacc_Main.f90: $(DSMACC_SRC)
 	cd stage && ./reprocess.sh
+
+depos.kpp: organic.kpp inorganic.kpp
+	idl -e '.run deposition.pro'
 
 kpp: kpp/bin/kpp
 kpp/bin/kpp: Makefile.defs
@@ -47,3 +50,4 @@ distclean: clean
 	@rm -f bin/dsmacc
 	cd kpp && $(MAKE) distclean
 	@rm -f autom4te.cache config.status config.log Makefile.deps
+
