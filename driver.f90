@@ -1,6 +1,6 @@
 PROGRAM driver
     USE dsmacc_global
-    USE dsmacc_Parameters  !ONLY: IND_*
+    USE dsmacc_Parameters
     USE dsmacc_Rates,       ONLY: Update_SUN, Update_RCONST, J
     USE dsmacc_integrator,  ONLY: integrate
     USE dsmacc_monitor,     ONLY: SPC_NAMES, MONITOR
@@ -8,22 +8,21 @@ PROGRAM driver
 
     IMPLICIT NONE
 
-    REAL(dp) :: TNOX, TNOX_OLD
     REAL(dp) :: CALCJO1D, CALCJNO2
     REAL(dp) :: RSTATE(20)
-
     REAL(dp) :: BASE_JDAY
-    INTEGER  :: ERROR, IJ
-    ! Photolysis calculation variables
-    REAL(dp) :: Alta
 
-    INTEGER  :: i, CONSTNOXSPEC, JK, counter
+    REAL(dp) :: TNOX, TNOX_OLD, NOXRATIO
+    REAL(dp), POINTER :: DIURNAL_OLD(:,:), DIURNAL_NEW(:,:)
+    REAL(dp), ALLOCATABLE :: DIURNAL_RATES(:,:)
+
+    INTEGER  :: ERROR, I, IJ, JK, point
     INTEGER :: day_tsteps, STEPS_PER_DAY
     LOGICAL :: reached_steady_state
 
-    REAL(dp) :: NOXRATIO
-    REAL(dp), POINTER :: DIURNAL_OLD(:,:), DIURNAL_NEW(:,:)
-    REAL(dp), ALLOCATABLE :: DIURNAL_RATES(:,:)
+    ! Photolysis calculation variables
+    REAL(dp) :: Alta
+
 
     ! DT - timestep var defined by KPP in the dsmacc_Global module.
     ! It is the timestep for output, rate constant and photolysis rates.
@@ -51,9 +50,9 @@ PROGRAM driver
 ! XXX unit numbers for each Spec_*.dat and Rate_*.dat files
 
     !This is the loop of different points in the Init_cons.dat file
-    DO counter = 1, LINECOUNT-3
+    DO point = 1, LINECOUNT-3
 !$OMP CRITICAL
-        CALL NextInitCons(counter)
+        CALL NextInitCons(point)
 !$OMP END CRITICAL
 
         M  = CFACTOR
@@ -106,7 +105,7 @@ PROGRAM driver
 
         ! Calculate the photolysis rates for the run
         !$OMP CRITICAL 
-        !IF (JREPEAT == 0 .OR. counter == 1) THEN 
+        !IF (JREPEAT == 0 .OR. point == 1) THEN 
         !    CALL set_up_photol(O3col,Albedo, alta, temp, bs,cs,ds,szas,svj_tj)
         !ELSE
         !    WRITE(OUT_UNIT,*) 'Using previously calculated photolysis params'
@@ -163,7 +162,7 @@ PROGRAM driver
         WRITE(OUT_UNIT,*) 'Correction JO1D and JNO2 by', JFACTO1D, JFACTNO2
 
         ! Open next Spec_*.dat and Rate_*.dat files
-        CALL OpenDataFiles(counter)
+        CALL OpenDataFiles(point)
 
         ! If we are running a free running model output the initial condition
         ! so T=0 of the output file gives the initial condition
@@ -192,7 +191,7 @@ PROGRAM driver
                 IERR_U=ERROR)
 
             IF (ERROR /= 1) THEN
-                WRITE(OUT_UNIT,*) 'Integration error at point', counter, &
+                WRITE(OUT_UNIT,*) 'Integration error at point', point, &
                     'time', time
                 IF (NMONITOR > 0) THEN
                     WRITE(OUT_UNIT,'(100000(E25.16E3,"!"))') time, &
@@ -267,7 +266,7 @@ PROGRAM driver
 
 1000    print *, "out of time loop"
 
-        CALL CloseDataFiles(counter)
+        CALL CloseDataFiles(point)
     END DO ! each independent 'point' to run at
 !$OMP END DO NOWAIT
 !$OMP END PARALLEL 
