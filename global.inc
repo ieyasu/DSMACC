@@ -1,7 +1,7 @@
 #INLINE F90_GLOBAL
     REAL(dp) :: PRESS, LAT, LON, O3COL, JO1D, JNO2
     REAL(dp) :: JDAY, JREPEAT, ALBEDO, SAREA, RP1
-    INTEGER :: INIT_TIME, NOX(NVAR)
+    INTEGER :: NOX(NVAR)
     REAL(dp):: CONSTRAIN(NVAR)
     ! indexes to these species, non-zero when not in Init_cons.dat
     INTEGER :: NEED_CH4_IDX, NEED_H2_IDX

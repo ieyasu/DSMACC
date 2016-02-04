@@ -225,20 +225,6 @@ SUBROUTINE NextInitCons(counter)
         CONSTRAIN(I)=CONSTRAIN(I)*CFACTOR
     END DO
 
-    IF (NEED_CH4_IDX > 0) THEN
-        J = NEED_CH4_IDX
-        WRITE(OUT_UNIT,*) 'No CH4 specified, assuming 1770 ppbv'
-        VAR(J) = 1770e-9 * CFACTOR
-        CONSTRAIN(J) = VAR(J)
-    END IF
-
-    IF (NEED_H2_IDX > 0) THEN
-        J = NEED_H2_IDX
-        WRITE(OUT_UNIT,*) 'No H2 specified, assuming 550 ppbv'
-        VAR(J) = 550e-9 * CFACTOR
-        CONSTRAIN(J) = VAR(J)
-    END IF
-
     ! FIND NOX species
     IF (CONSTRAIN_NOX) THEN 
         COUNT_NOX_CONSTRAINTS = 0
@@ -265,6 +251,29 @@ SUBROUTINE NextInitCons(counter)
 
             STOP
         END IF
+    END IF
+
+    ! set some defaults
+    IF (NEED_CH4_IDX > 0) THEN
+        J = NEED_CH4_IDX
+        WRITE(OUT_UNIT,*) 'No CH4 specified, assuming 1770 ppbv'
+        VAR(J) = 1770e-9 * CFACTOR
+        CONSTRAIN(J) = VAR(J)
+    END IF
+    IF (NEED_H2_IDX > 0) THEN
+        J = NEED_H2_IDX
+        WRITE(OUT_UNIT,*) 'No H2 specified, assuming 550 ppbv'
+        VAR(J) = 550e-9 * CFACTOR
+        CONSTRAIN(J) = VAR(J)
+    END IF
+    
+    IF (O3COL == 0) THEN
+        WRITE(OUT_UNIT,*) 'Ozone column not specified; using 260 Dobsons'
+        O3COL = 260.
+    END IF
+    IF (ALBEDO == 0) THEN 
+        WRITE(OUT_UNIT,*) 'Albedo not specified; using 0.1'
+        ALBEDO = 0.1
     END IF
 END SUBROUTINE NextInitCons
 

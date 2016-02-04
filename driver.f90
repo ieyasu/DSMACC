@@ -31,8 +31,8 @@ PROGRAM driver
 
     STEPMIN = 0.0_dp
     STEPMAX = 0.0_dp
-    RTOL(1:NVAR) = 1.0e-5_dp
-    ATOL(1:NVAR) = 1.0_dp
+    RTOL(:) = 1.0e-5_dp
+    ATOL(:) = 1.0_dp
 
     IF (NMONITOR > 0) THEN
         ALLOCATE(COLD(NSPEC))
@@ -94,20 +94,8 @@ PROGRAM driver
         WRITE(OUT_UNIT,*) 'Lon =', Lon
         WRITE(OUT_UNIT,*) 'Local Time =', Tstart/(60.*60.)
         !WRITE(OUT_UNIT,*) 'SZA =',ZENANG(int(jday),Tstart/(60.*60.),lat)*180./(4*ATAN(1.))
-
-        ! XXX this stuff belongs over in util.inc
-        IF (o3col == 0) THEN
-            o3col = 260.
-            WRITE(OUT_UNIT,*) 'Ozone column not specified; using 260 Dobsons'
-        ELSE
-            WRITE(OUT_UNIT,*) 'Ozone column =', o3col
-        END IF
-        IF (albedo == 0) THEN 
-            albedo = 0.1
-            WRITE(OUT_UNIT,*) 'Albedo not specified; using 0.1'
-        ELSE
-            WRITE(OUT_UNIT,*) 'Albedo =', albedo
-        END IF
+        WRITE(OUT_UNIT,*) 'Ozone column =', o3col
+        WRITE(OUT_UNIT,*) 'Albedo =', albedo
 
         ! Calculate the photolysis rates for the run
         !$OMP CRITICAL 
@@ -119,7 +107,6 @@ PROGRAM driver
         !$OMP END CRITICAL
         !WRITE(OUT_UNIT,*) 'Photolysis rates calculated'
         !WRITE(OUT_UNIT,*) '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
-        time = tstart
 
         IF (CONSTRAIN_NOX) THEN ! calculate the total NOx in the model 
             TNOX_OLD=0.
@@ -130,11 +117,7 @@ PROGRAM driver
 
         ! Initialize model state
         IF (CONSTRAIN_RUN) THEN
-            DO I = 1, NVAR
-                DO K = 1, STEPS_PER_DAY
-                    DIURNAL_OLD(I,K) = 0.
-                END DO
-            END DO
+            DIURNAL_OLD(:,:) = 0.
             reached_steady_state = .FALSE.
             day_tsteps = 0
         END IF
@@ -173,7 +156,7 @@ PROGRAM driver
         ! If we are running a free running model output the initial condition
         ! so T=0 of the output file gives the initial condition
         IF (.NOT. CONSTRAIN_RUN) THEN 
-            CALL WriteCurrentData(time)
+            CALL WriteCurrentData(tstart)
         END IF
 
 251 FORMAT (100000(a25,"!"))
@@ -182,10 +165,11 @@ PROGRAM driver
         WRITE(ERROR_UNIT,*) 'Concentrations in ppb'
         IF (NMONITOR > 0) THEN
             WRITE(ERROR_UNIT,251) 'TIME', (SPC_NAMES(MONITOR(i)),i=1,NMONITOR)
-            WRITE(ERROR_UNIT,252) time, (C(MONITOR(i))/CFACTOR * 1e9,i=1,NMONITOR)
+            WRITE(ERROR_UNIT,252) tstart, (C(MONITOR(i))/CFACTOR * 1e9,i=1,NMONITOR)
         END IF
 
         ! This is the main loop for integrations
+        time = tstart
         time_loop: DO WHILE (time < TEND)
 
             ! Update the rate constants
@@ -294,19 +278,14 @@ CONTAINS
         day_tsteps = day_tsteps + 1
 
         ! save diurnal profile of all species
-        DO I=1,NVAR
-            DIURNAL_NEW(I,day_tsteps) = C(I)
-        END DO
-        DO I=1,NREACT
-            DIURNAL_RATES(I,day_tsteps) = RCONST(I)
-        END DO
+        DIURNAL_NEW(:,day_tsteps) = C(:)
+        DIURNAL_RATES(:,day_tsteps) = RCONST(:)
 
 
-        IF (day_tsteps < steps_per_day) RETURN ! not end of day
+        IF (day_tsteps < steps_per_day) RETURN ! not end of day, skip checks
 
 
-
-        ! Do end-of-day checks
+        ! end-of-day checks
 
         ! We need to fiddle with the NOX to ensure it has the right concentrations and see if we have reached a steady state
 
@@ -362,12 +341,11 @@ CONTAINS
                 CALL WriteCurrentData(JDAY)
             END IF
         ELSE
-            CALL SWAP_DIURNAL
-            day_tsteps = 0 ! move on to next day
+            CALL SWAP_DIURNAL ! swap pointers instead of copying new to old
+            day_tsteps = 0 ! reset for next day
         END IF
     END SUBROUTINE CONSTRAINED_STEP
 
-    ! Swap diurnal new and old arrays to quickly reuse the former as the latter
     SUBROUTINE SWAP_DIURNAL
         REAL(dp), POINTER :: dp(:,:)
 
