@@ -100,7 +100,7 @@ SUBROUTINE OpenInitCons()
         DO J = 1, NVAR
             IF (TRIM(file_spec_names(I)) == TRIM(SPC_NAMES(J))) THEN
                 file_spec_idx(I) = J
-                EXIT ! XXX surely won't have dupe names in file?!
+                EXIT
             END IF
         END DO
     END DO
@@ -253,8 +253,16 @@ SUBROUTINE NextInitCons(counter)
         END DO
 
         IF (COUNT_NOX_CONSTRAINTS > 1) THEN 
-            WRITE (OUT_UNIT,*) 'You cannot constrain multiple NOX species'
-            ! XXX error message showing which species are being constrained
+            WRITE(OUT_UNIT,*) 'You cannot constrain multiple NOX species:'
+
+            DO I = 1, NVAR
+                IF (NOX(I) /= 0 .AND.CONSTRAIN(I) /= 0 .AND. &
+                    TRIM(SPC_NAMES(I)) /= 'PNA') THEN
+                    WRITE(OUT_UNIT,*) " -", SPC_NAMES(I)
+                END IF
+            END DO
+            WRITE(OUT_UNIT,*) 'are currently constrained'
+
             STOP
         END IF
     END IF
