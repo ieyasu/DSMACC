@@ -16,6 +16,14 @@ bin/dsmacc: src/dsmacc_Main.f90 tuv src/depend.mk Makefile.defs
 src/dsmacc_Main.f90: $(DSMACC_SRC)
 	cd stage && ./reprocess.sh
 
+organic.kpp:
+	@echo "You'll need to get your own organic.kpp as per instructions in Readme.md"
+	@exit 1
+
+inorganic.kpp:
+	@echo "You'll need to get your own inorganic.kpp as per instructions in Readme.md"
+	@exit 1
+
 depos.kpp: organic.kpp inorganic.kpp
 	idl -e '.run deposition.pro'
 
