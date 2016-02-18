@@ -2,7 +2,7 @@ include Makefile.defs
 export KPP_HOME=$(PWD)/kpp
 
 DSMACC_SRC = driver.f90 dsmacc.kpp \
-	global.inc rate.inc util.inc photolysis.inc \
+	global.inc.f90 rate.inc.f90 util.inc.f90 photolysis.inc.f90 \
 	inorganic.kpp organic.kpp depos.kpp
 
 .PHONY: all dsmacc kpp tuv depend check clean distclean
