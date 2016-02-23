@@ -19,6 +19,10 @@ src/dsmacc_Main.f90: $(DSMACC_SRC)
 depos.kpp: organic.kpp inorganic.kpp
 	bin/mkdeposition.sh
 
+organic.kpp:
+	@echo "You need to provide your own organic.kpp, usually made with U. Leeds' MCM.  See the Readme.md for details."
+	@exit 1
+
 kpp: kpp/bin/kpp
 kpp/bin/kpp: Makefile.defs
 	cd kpp && $(MAKE)
@@ -41,13 +45,12 @@ check: kpp/bin/kpp
 	cd test && $(MAKE)
 
 clean:
+	@rm -f stage/dsmacc.map stage/Makefile_dsmacc
 	cd src && $(MAKE) distclean
 	cd test && $(MAKE) clean
-	cd tuv && $(MAKE) clean
-	cd kpp && $(MAKE) clean
 
 distclean: clean
 	@rm -f bin/dsmacc
+	cd tuv && $(MAKE) clean
 	cd kpp && $(MAKE) distclean
 	@rm -f autom4te.cache config.status config.log Makefile.deps
-

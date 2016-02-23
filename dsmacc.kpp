@@ -1,25 +1,24 @@
-// include file with definition of the chemical species
-// and chemical equations
-
-//#INCLUDE ./mcm_subset.kpp
-#INCLUDE ./CRI_subset.kpp
-
-
-//#INCLUDE ../inorganic.kpp
-//#INCLUDE ../organic.kpp
-//#INCLUDE ../depos.kpp
-
-#INCLUDE ../global.inc
-#INCLUDE ../rate.inc
-#INCLUDE ../photolysis.inc
-#INCLUDE ../util.inc
-
-#DOUBLE ON 
+// DSMACC main configuration file
 
 // computer language for code produced by kpp
 #LANGUAGE FORTRAN90
-// #LANGUAGE FORTRAN77
-// #LANGUAGE C
+
+// Example chemical schemes.  To use, uncomment one of these and comment out
+// organic.kpp, depos.kpp and inorganic.kpp below.
+//#INCLUDE ./mcm_subset.kpp
+//#INCLUDE ./CRI_subset.kpp
+
+// The usual chemical scheme definition files.  See Readme.md for details.
+#INCLUDE ../inorganic.kpp
+#INCLUDE ../organic.kpp
+#INCLUDE ../depos.kpp
+
+#INCLUDE ../global.inc.f90
+#INCLUDE ../rate.inc.f90
+#INCLUDE ../photolysis.inc.f90
+#INCLUDE ../util.inc.f90
+
+#DOUBLE ON 
 
 // initial concentrations
 #INITVALUES
