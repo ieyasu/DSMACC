@@ -3,6 +3,8 @@
 depend.mk
 depend.mk.old
 fort.*
+depos.kpp
+organic.kpp
 dsmacc_*.f90
 dsmacc
 dsmacc.map

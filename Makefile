@@ -17,7 +17,7 @@ src/dsmacc_Main.f90: $(DSMACC_SRC)
 	cd stage && ./reprocess.sh
 
 depos.kpp: organic.kpp inorganic.kpp
-	idl -e '.run deposition.pro'
+	bin/mkdeposition.sh
 
 kpp: kpp/bin/kpp
 kpp/bin/kpp: Makefile.defs
