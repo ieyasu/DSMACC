@@ -2,7 +2,7 @@ include Makefile.defs
 export KPP_HOME=$(PWD)/kpp
 
 DSMACC_SRC = driver.f90 dsmacc.kpp \
-	global.inc rate.inc util.inc photolysis.inc \
+	global.inc.f90 rate.inc.f90 util.inc.f90 photolysis.inc.f90 \
 	inorganic.kpp organic.kpp depos.kpp
 
 .PHONY: all dsmacc kpp tuv depend check clean distclean
@@ -25,7 +25,11 @@ inorganic.kpp:
 	@exit 1
 
 depos.kpp: organic.kpp inorganic.kpp
-	idl -e '.run deposition.pro'
+	bin/mkdeposition.sh
+
+organic.kpp:
+	@echo "You need to provide your own organic.kpp, usually made with U. Leeds' MCM.  See the Readme.md for details."
+	@exit 1
 
 kpp: kpp/bin/kpp
 kpp/bin/kpp: Makefile.defs
@@ -49,13 +53,12 @@ check: kpp/bin/kpp
 	cd test && $(MAKE)
 
 clean:
+	@rm -f stage/dsmacc.map stage/Makefile_dsmacc
 	cd src && $(MAKE) distclean
 	cd test && $(MAKE) clean
-	cd tuv && $(MAKE) clean
-	cd kpp && $(MAKE) clean
 
 distclean: clean
 	@rm -f bin/dsmacc
+	cd tuv && $(MAKE) clean
 	cd kpp && $(MAKE) distclean
 	@rm -f autom4te.cache config.status config.log Makefile.deps
-

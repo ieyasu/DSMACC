@@ -2,8 +2,9 @@ include ../Makefile.defs
 
 PROG = ../bin/dsmacc
 DSRC = $(wildcard dsmacc_*.f90)
+SRC = constants.f90 $(DSRC)
 TUVSRC = $(wildcard ../tuv/*.f)
-OBJS = $(DSRC:.f90=.o)
+OBJS = $(SRC:.f90=.o)
 
 .SUFFIXES: .o .f90
 .DUMMY: all depend clean distclean
@@ -28,8 +29,8 @@ $(PROG): depend.mk $(OBJS) ../tuv/libtuv.a
 # update file dependencies
 # sfmakedpend comes from http://www.arsc.edu/~kate/Perl
 depend: depend.mk
-depend.mk: $(DSRC) $(TUVSRC)
-	../bin/sfmakedepend --file=depend.mk $(DSRC) $(TUVSRC)
+depend.mk: $(SRC) $(TUVSRC)
+	../bin/sfmakedepend --file=depend.mk $(SRC) $(TUVSRC)
 
 clean:
 	rm -f *.o *.mod *.log *~ depend.mk.old

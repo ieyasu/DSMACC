@@ -190,6 +190,8 @@ SUBROUTINE NextInitCons(counter)
     DO I = 1, n_file_specs
         FOUND = .TRUE.
         SELECT CASE (TRIM(file_spec_names(I)))
+        CASE ('DEPOS')
+            DEPOSITION = fconcs(I)
         CASE ('H2O')
             H2O = fconcs(I)
         CASE ('PRESS')
