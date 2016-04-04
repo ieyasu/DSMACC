@@ -27,10 +27,6 @@ inorganic.kpp:
 depos.kpp: organic.kpp inorganic.kpp
 	bin/mkdeposition.sh
 
-organic.kpp:
-	@echo "You need to provide your own organic.kpp, usually made with U. Leeds' MCM.  See the Readme.md for details."
-	@exit 1
-
 kpp: kpp/bin/kpp
 kpp/bin/kpp: Makefile.defs
 	cd kpp && $(MAKE)
