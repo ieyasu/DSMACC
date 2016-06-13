@@ -48,7 +48,7 @@ NO3 = IGNORE ;
  !RO2 = &  MSB - had to comment out
  !C(ind_)
  CALL mcm_constants(time, temp, M, N2, O2, RO2, H2O)
- #ENDINLINE
+#ENDINLINE
 {above lines go into the SUBROUTINES UPDATE_RCONST and UPDATE_PHOTO}
 #EQUATIONS
 {1.} 	 O = O3 : 	5.6D-34*N2*(TEMP/300)**(-2.6)*O2+6.0D-34*O2*(TEMP/300)**(-2.6)*O2 	;
