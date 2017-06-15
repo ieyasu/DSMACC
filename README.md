@@ -138,8 +138,7 @@ Output Files
 
 The output of each independent simulation is written to the files Spec\_\*.dat and Rate\_\*.dat where the \* represents an integer value representing the simulation number.
 
-The format is...
-
+The format of Spec file data is `FORMAT (100000(E25.16E3,"!"))` and the format of the Rate file data is `FORMAT (100000(E50.16E3,"!"))`.
 
 Other Topics
 ============
