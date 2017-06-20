@@ -14,7 +14,7 @@ DSMACC is setup to run in a POSIX (UNIX) programming environment:
 1.  POSIX environment: Linux, BSD, Solaris, [Cygwin](http://www.cygwin.com/) on Windows, etc.
 2.  C and Fortran compilers (e.g., [GNU](http://gcc.gnu.org/wiki/GFortran), Intel, or Portland Group)
 3.  [Bison](http://www.gnu.org/software/bison/)
-4.  [FLEX](www.gnu.org/software/flex/)
+4.  [FLEX](http://www.gnu.org/software/flex/)
 
 
 Getting DSMACC
